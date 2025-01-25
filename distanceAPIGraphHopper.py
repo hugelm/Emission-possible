@@ -1,22 +1,28 @@
 import requests
 import os
+from geopy.geocoders import Nominatim
 
 # Documentation: https://docs.graphhopper.com/openapi/routing/getroute
 # Keys: https://graphhopper.com/dashboard/#/apikeys (500 requests per day)
 
 api_key = os.getenv("API_KEY_GRAPHHOPPER")
+geolocator = Nominatim(user_agent="EmissionPossible")
+
+def geocode_address(address):
+    location = geolocator.geocode(address)
+
+    if location:
+        #print(f"Address: {address}")
+        #print(f"Latitude: {location.latitude}")
+        #print(f"Longitude: {location.longitude}")
+        return str(location.latitude)+","+str(location.longitude)
+    else:
+        print(f"Address {address} could not be geocoded.")
 
 def get_distance_and_duration(input_start, input_destination, api_key=api_key):
 
-    # convert address to coordinates (geocoding with Nominatim API)
-    geocoding_start = requests.get(f"https://nominatim.openstreetmap.org/search?q={input_start}&format=json&limit=1",
-                                        headers = {"User-Agent": "MyGeocodingApp/1.0 (myemail@example.com)"}
-                                        ).json()[0]
-    geocoding_destination = requests.get(f"https://nominatim.openstreetmap.org/search?q={input_destination}&format=json&limit=1",
-                                        headers = {"User-Agent": "MyGeocodingApp/1.0 (myemail@example.com)"}
-                                        ).json()[0]
-    input_start = str(geocoding_start["lat"])+","+str(geocoding_start["lon"])
-    input_destination = str(geocoding_destination["lat"])+","+str(geocoding_destination["lon"])
+    input_start = geocode_address(input_start)
+    input_destination = geocode_address(input_destination)
 
     api_url = (f"https://graphhopper.com/api/1/route?"
                f"point={input_start}&"
@@ -37,10 +43,10 @@ def get_distance_and_duration(input_start, input_destination, api_key=api_key):
         duration = route_calculation["time"]
         duration_in_min = duration/60/1000
 
-        print("It takes "+str(round(duration_in_min,2))+"min and "+str(round(distance_in_km,2))+"km.")
+        return "It takes "+str(round(duration_in_min,2))+"min and "+str(round(distance_in_km,2))+"km.", "success"
 
     else:
 
-        print(response.text)
+        return response.text, "danger"
 
-get_distance_and_duration("Mainz", "Mannheim")
+#print(get_distance_and_duration("Mainz", "Mannheim"))
