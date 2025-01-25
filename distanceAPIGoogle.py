@@ -1,19 +1,7 @@
 import requests
 import os
 
-# https://developers.google.com/maps/documentation/distance-matrix/distance-matrix
-
-"""
-Do not forget to add the API key as environment variable bore running this module!
-
-Windows CMD:
-- set API_KEY=123
-- echo %API_KEY%
-
-IntelliJ IDEA
-- go to "Run/Edit Configurations/Python"
-- setup .py as script file and define environment variable API_KEY=123
-"""
+# Documentation: https://developers.google.com/maps/documentation/distance-matrix/distance-matrix
 
 api_key = os.getenv("API_KEY")
 
