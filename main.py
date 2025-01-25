@@ -2,7 +2,8 @@ import dash
 import dash_bootstrap_components as dbc
 
 app = dash.Dash(
-    external_stylesheets=[dbc.themes.BOOTSTRAP]
+    external_stylesheets=[dbc.themes.BOOTSTRAP],
+    title="E-Mission Possible"
 )
 
 app.layout = dbc.Alert(
