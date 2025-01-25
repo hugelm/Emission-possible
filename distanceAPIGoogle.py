@@ -44,7 +44,7 @@ if response.status_code == 200:
     duration = route_calculation["duration"]
     duration_in_min = duration["value"]/60
 
-    print("It takes "+duration["text"]+" and "+distance["text"]+" to travel from "+destination_address+" to "+origin_address+".")
+    print("It takes "+duration["text"]+" and "+distance["text"]+" to travel from "+origin_address+" to "+destination_address+".")
 
 else:
 
