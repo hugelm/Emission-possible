@@ -12,9 +12,6 @@ def geocode_address(address):
     location = geolocator.geocode(address)
 
     if location:
-        #print(f"Address: {address}")
-        #print(f"Latitude: {location.latitude}")
-        #print(f"Longitude: {location.longitude}")
         return str(location.latitude)+","+str(location.longitude)
     else:
         print(f"Address {address} could not be geocoded.")
