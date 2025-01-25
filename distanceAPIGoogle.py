@@ -30,10 +30,11 @@ api_url = (f"https://maps.googleapis.com/maps/api/distancematrix/json?"
 )
 
 response = requests.get(api_url)
+print(response)
 data = response.json()
 print(data)
 
-if response.status_code == 200:
+if response.status_code == 200 and data["status"] == "OK":
 
     origin_address = data["origin_addresses"][0]
     destination_address = data["destination_addresses"][0]
