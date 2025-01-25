@@ -12,6 +12,37 @@ app.layout = dbc.Container(
     [
 
         # Header
+        dbc.Navbar(
+            dbc.Container(
+                [
+                    html.Div(
+                        [
+                            html.Img(
+                                src="assets/logo.jpg",  # Replace with your logo image URL
+                                height="50px",
+                            ),
+                            html.H1("E-Mission Possible", className="ms-3 text-light"),  # Main title
+                        ],
+                        className="d-flex align-items-center",
+                    ),
+
+                    # Navigation links
+                    dbc.NavbarSimple(
+                        children=[
+                            dbc.NavItem(dbc.NavLink("Home", href="#")),
+                            dbc.NavItem(dbc.NavLink("About", href="#")),
+                            dbc.NavItem(dbc.NavLink("Contact", href="#")),
+                        ],
+                        color="success",
+                        dark=True,
+                    ),
+                ]
+            ),
+            color="success",
+            dark=True,
+        ),
+
+        # Header
         dbc.Row(
             [
                 dbc.Col(
