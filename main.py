@@ -3,12 +3,12 @@ import dash_bootstrap_components as dbc
 import distanceAPIGraphHopper
 
 app = Dash(
-    external_stylesheets=[dbc.themes.BOOTSTRAP],
+    external_stylesheets=["/assets/style.css", dbc.themes.BOOTSTRAP],
     title="E-Mission Possible",
 )
 app._favicon = "logo.jpg"
 
-app.layout = (
+app.layout = html.Div([
 
     # Header
     dbc.Navbar(
@@ -17,18 +17,18 @@ app.layout = (
                 html.Div(
                     [
                         html.Img(
-                            src="assets/logo.jpg",  # Replace with your logo image URL
+                            src="/assets/logo.jpg",  # Korrekte URL für Dash
                             height="50px",
                         ),
-                        html.H1("E-Mission Possible", className="ms-3 text-light"),  # Main title
+                        html.H1("E-Mission Possible", className="ms-3 text-light"),
                     ],
                     className="d-flex align-items-center",
                 ),
 
-                # Navigation links
                 dbc.NavbarSimple(
                     children=[
                         dbc.NavItem(dbc.NavLink("Home", href="#")),
+                        dbc.NavItem(dbc.NavLink("Log In", href="#")),
                         dbc.NavItem(dbc.NavLink("About", href="#")),
                         dbc.NavItem(dbc.NavLink("Contact", href="#")),
                     ],
@@ -41,58 +41,50 @@ app.layout = (
         dark=True,
     ),
 
-    # Main
-    dbc.Container(
-    [
+    # Carousel
+    dbc.Carousel(
+        items=[
+            {"key": "1", "src": "/assets/Bild1.jpg", "imgClassName": "img-fluid"},
+            {"key": "2", "src": "/assets/Bild2.jpg", "imgClassName": "img-fluid"},
+            {"key": "3", "src": "/assets/Bild3.jpg", "imgClassName": "img-fluid"},
+        ],
+        controls=True,
+        indicators=True,
+        interval=2000,
+        ride="carousel"
+        ),
 
+    dbc.Container([
         # Title
         dbc.Row(
-            [
-                dbc.Col(
-                    html.Div(
-                        [
-                            html.H1("E-Mission Possible", className="display-3 text-center text-primary mb-2"),
-                            html.H3("Distance and Travel Time Calculator", className="lead text-center text-muted mb-3"),
-                            html.Img(src="assets/logo.jpg", height="100px", className="d-block mx-auto mt-3"),
-                        ]
-                    ),
-                    width=12,  # Full width of the row
-                ),
-            ],
-            className="my-4",  # Margin top and bottom for spacing
-            justify="center",  # Centers the row horizontally
+            dbc.Col(
+                html.Div([
+                    html.H1("E-Mission Possible", className="display-3 text-center text-primary mb-2 fw-bold"),
+                    html.H3("Distance and Travel Time Calculator", className="lead text-center text-muted mb-3"),
+                    html.Img(src="/assets/logo.jpg", height="100px", className="d-block mx-auto mt-3"),
+                    html.H6("To enjoy the full dashboard experience, please log in.", className="display-8 lead text-center text-muted mb-3 mt-3"),
+                ]),
+                width=12,
+            ),
+            className="my-4",
+            justify="center",
         ),
 
         # Input fields
-        dbc.Row(
-            [
-                dbc.Col(
-                    dbc.Input(id="input-start", placeholder="Enter start location...", type="text"),
-                    width=5,
-                ),
-                dbc.Col(
-                    dbc.Input(id="input-destination", placeholder="Enter destination...", type="text"),
-                    width=5,
-                ),
-                dbc.Col(
-                    dbc.Button("Calculate", id="btn-calculate", color="primary"),
-                    width=2,
-                ),
-            ],
-            className="mb-3",
-        ),
+        dbc.Row([
+            dbc.Col(dbc.Input(id="input-start", placeholder="Enter start location...", type="text"), width=5),
+            dbc.Col(dbc.Input(id="input-destination", placeholder="Enter destination...", type="text"), width=5),
+            dbc.Col(dbc.Button("Calculate", id="btn-calculate", color="primary"), width=2),
+        ], className="mb-3"),
 
         # Result
         dcc.Loading(
             id="loading-1",
             type="dot",
-            children=[
-                dbc.Alert("Hello Bootstrap!", color="primary", id="alert-calculation"),
-            ]
+            children=[dbc.Alert("Hello Bootstrap!", color="primary", id="alert-calculation")]
         ),
-    ],
-    fluid=True,
-))
+    ], fluid=True)
+])
 
 # Callback function for calculating the distance and time
 @app.callback(

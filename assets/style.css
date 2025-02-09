@@ -1,0 +1,10 @@
+.carousel img {
+    height: 30rem;
+    width: 100%;
+    /* aspect-ratio: 4/3; */
+    object-fit: cover;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+}
