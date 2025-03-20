@@ -1,5 +1,5 @@
 .carousel img {
-    height: 30rem;
+    height: 20rem;
     width: 100%;
     /* aspect-ratio: 4/3; */
     object-fit: cover;
@@ -7,4 +7,49 @@
     margin-right: auto;
     display: flex;
     justify-content: center;
+}
+/* Hintergrund-Carousel */
+.carousel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
+/* Navbar und Container über das Carousel legen */
+.navbar, .container {
+    position: relative;
+    z-index: 10;
+}
+/* Navigation Schriftfarbe in dunkelgrau */
+.navbar-dark .nav-link {
+    color: #FFFFFF !important;
+    font-weight: 750;
+    font-size: large;
+}
+.display-3{
+    margin-top: 15rem;
+    color: #008000;
+}
+.btn-primary {
+    background-color: #008000;
+    border-color: #008000;
+    --bs-btn-hover-bg: #469536;
+    --bs-btn-hover-border-color: #469536;
+}
+.h2 {
+    color: #008000;
+    text-align: center;
+}
+.logInFelder {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+.buttonLogIn {
+    margin-top: 1rem;
+    text-align: center;
+    cursor:pointer;
+    --bs-btn-hover-bg: #469536;
 }
