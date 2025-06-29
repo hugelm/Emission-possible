@@ -22,14 +22,20 @@ dcc.Location(id="url", refresh=False),  # 🔹 URL-Tracking-Element
         dbc.Container([
             dbc.NavbarSimple(
                 children=[
-                    dbc.NavItem(dbc.NavLink("Home", href="/")),
-                    dbc.NavItem(dbc.NavLink("Log In", href="/login")),
+                    dbc.NavItem(dbc.NavLink("Calculator", href="/")),
+                    dbc.NavItem(dbc.NavLink("Educational Resources", href="/resources")),
                     dbc.NavItem(dbc.NavLink("About", href="/about")),
                     dbc.NavItem(dbc.NavLink("Contact", href="/contact")),
                 ],
                 className="ms-auto",
                 color="transparent",
                 dark=True,
+            ),
+            dbc.NavItem(
+                dbc.Button("Log In", href="/login", color="primary", outline=False, className="ms-2 fw-semibold shadow-sm")
+            ),
+            dbc.NavItem(
+                dbc.Button("Register", href="/register", color="primary", outline=False, className="ms-2 fw-semibold shadow-sm")
             ),
         ], fluid=True),
         color="transparent",
@@ -48,11 +54,21 @@ dcc.Location(id="url", refresh=False),  # 🔹 URL-Tracking-Element
 def display_page(pathname):
     if pathname == "/login":
         return html.Div([
-            html.H2("Login Page", className="h2"),
+            html.H2("Saving the World? There's a Login for that 🌳", className="h2"),
             dbc.Container([
                 dbc.Row(dbc.Col(dbc.Input(placeholder="Enter username...", className="logInFelder", type="text"), width=6), justify="center"),
                 dbc.Row(dbc.Col(dbc.Input(placeholder="Enter password...", type="password"), width=6), justify="center"),
                 dbc.Row(dbc.Col(dbc.Button("Log In", color="primary"), width=6, className="buttonLogIn"), justify="center"),
+            ], className="mt-4")
+        ])
+
+    if pathname == "/register":
+        return html.Div([
+            html.H2("Join the E-Mission to a Cleaner Future 🌍", className="h2"),
+            dbc.Container([
+                dbc.Row(dbc.Col(dbc.Input(placeholder="Enter email...", className="logInFelder", type="text"), width=6), justify="center"),
+                dbc.Row(dbc.Col(dbc.Input(placeholder="Enter password...", type="password"), width=6), justify="center"),
+                dbc.Row(dbc.Col(dbc.Button("Register", color="primary"), width=6, className="buttonLogIn"), justify="center"),
             ], className="mt-4")
         ])
     
@@ -61,7 +77,65 @@ def display_page(pathname):
 
     elif pathname == "/contact":
         return html.Div([html.H2("Contact Us", className="text-center"), html.P("You can reach us at contact@example.com.")])
-    
+
+    elif pathname == "/resources":
+        return html.Div([
+            html.H2("📘 Educational Resources", className="text-center my-4 fw-bold"),
+
+            dbc.Container([
+
+                # SECTION 1 - Environmental Impact
+                dbc.Row([
+                    dbc.Col([
+                        html.Img(src="https://images.unsplash.com/photo-1528825871115-3581a5387919",
+                                 className="img-fluid rounded shadow mb-3",
+                                 style={"width": "100%", "maxHeight": "300px"}),
+                        html.H4("🌍 Environmental Impact of Transport", className="text-primary fw-semibold"),
+                        html.P("Transportation is one of the leading contributors to climate change. "
+                               "Understand how it affects air quality and contributes to greenhouse gas emissions. "
+                               "Learn how smarter travel choices can make a difference."),
+                    ], width=6),
+
+                    # SECTION 2 - Sustainable Options
+                    dbc.Col([
+                        html.Img(src="https://images.unsplash.com/photo-1520962912202-641dc3c52b19",
+                                 className="img-fluid rounded shadow mb-3",
+                                 style={"width": "100%", "maxHeight": "300px"}),
+                        html.H4("🚴‍♀️ Sustainable Transport Solutions", className="text-success fw-semibold"),
+                        html.P("Walking, cycling, and public transport are environmentally friendly and healthier choices. "
+                               "Discover how cities worldwide are moving toward greener infrastructure."),
+                    ], width=6),
+                ], className="mb-5"),
+
+                # SECTION 3 - Tools
+                dbc.Row([
+                    dbc.Col([
+                        html.H4("📊 Interactive Tools for Students & Educators", className="fw-semibold text-info"),
+                        html.P("Make learning engaging with these tools:"),
+                        html.Ul([
+                            html.Li(html.A("Carbon Footprint Calculator", href="https://www.carbonfootprint.com/calculator.aspx", target="_blank")),
+                            html.Li(html.A("Climate Science Info for Schools", href="https://climatekids.nasa.gov", target="_blank")),
+                            html.Li(html.A("Eco Journey: Route Planning Challenge", href="https://www.cooltheearth.org", target="_blank")),
+                            html.Li(html.A("Dashboard for Emission Tracking", href="https://ourworldindata.org/co2-emissions", target="_blank")),
+                        ])
+                    ])
+                ], className="mb-5"),
+
+                # SECTION 4 - Additional Reading
+                dbc.Row([
+                    dbc.Col([
+                        html.H5("📚 Additional Reading & Resources", className="fw-semibold"),
+                        html.Ul([
+                            html.Li(html.A("EPA – Transportation & Air Pollution", href="https://www.epa.gov/transportation-air-pollution-and-climate-change", target="_blank")),
+                            html.Li(html.A("UN – Sustainable Transport", href="https://www.un.org/en/climatechange/transport", target="_blank")),
+                            html.Li(html.A("IPCC Reports on Climate", href="https://www.ipcc.ch/reports/", target="_blank")),
+                        ])
+                    ])
+                ])
+            ], fluid=True)
+        ])
+
+
     else:  # Standard-Homepage (z.B. Startseite)
         return html.Div([
             dbc.Carousel(
