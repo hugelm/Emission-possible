@@ -32,14 +32,15 @@ dcc.Location(id="url", refresh=False),  # 🔹 URL-Tracking-Element
                 dark=True,
             ),
             dbc.NavItem(
-                dbc.Button("Log In", href="/login", color="primary", outline=False, className="ms-2 fw-semibold shadow-sm")
+                dbc.Button("Log In", href="/login", id="btn-login", color="primary", outline=False, className="ms-2 fw-semibold shadow-sm")
             ),
             dbc.NavItem(
-                dbc.Button("Register", href="/register", color="primary", outline=False, className="ms-2 fw-semibold shadow-sm")
+                dbc.Button("Register", href="/register", id="btn-register", color="primary", outline=False, className="ms-2 fw-semibold shadow-sm")
             ),
         ], fluid=True),
         color="transparent",
         dark=True,
+        id="navbar"
     ),
     
     # Hier wird die Seite dynamisch aktualisiert
@@ -58,17 +59,17 @@ def display_page(pathname):
             dbc.Container([
                 dbc.Row(dbc.Col(dbc.Input(placeholder="Enter username...", className="logInFelder", type="text"), width=6), justify="center"),
                 dbc.Row(dbc.Col(dbc.Input(placeholder="Enter password...", type="password"), width=6), justify="center"),
-                dbc.Row(dbc.Col(dbc.Button("Log In", color="primary"), width=6, className="buttonLogIn"), justify="center"),
+                dbc.Row(dbc.Col(dbc.Button("Log In", href="/dashboard", color="primary"), width=6, className="buttonLogIn"), justify="center"),
             ], className="mt-4")
         ])
 
     if pathname == "/register":
         return html.Div([
-            html.H2("Join the E-Mission to a Cleaner Future 🌍", className="h2"),
+            html.H2("The Road to Sustainability Starts Here. 🌍", className="h2"),
             dbc.Container([
                 dbc.Row(dbc.Col(dbc.Input(placeholder="Enter email...", className="logInFelder", type="text"), width=6), justify="center"),
                 dbc.Row(dbc.Col(dbc.Input(placeholder="Enter password...", type="password"), width=6), justify="center"),
-                dbc.Row(dbc.Col(dbc.Button("Register", color="primary"), width=6, className="buttonLogIn"), justify="center"),
+                dbc.Row(dbc.Col(dbc.Button("Register", href="/dashboard", color="primary"), width=6, className="buttonLogIn"), justify="center"),
             ], className="mt-4")
         ])
     
@@ -135,6 +136,92 @@ def display_page(pathname):
             ], fluid=True, className="px-4")
         ])
 
+    elif pathname == "/dashboard":
+        return html.Div([
+            # Header section
+            html.Div([
+                html.H2("Your Sustainability Dashboard", 
+                    className="text-center mb-3",
+                    style={"font-weight": "bolder", "font-size": "3em"}), 
+                html.P("Track your eco-friendly progress with E-Mission Possible", 
+                    className="text-center mb-4 text-success",
+                    style={"font-weight": "bold"})
+            ], className="container"),
+            
+            # Three environmental metric cards
+            dbc.Container([
+                dbc.Row([
+                    # Card 1: CO2 Savings
+                    dbc.Col(
+                        dbc.Card(
+                            [
+                                html.Div("🌍", className="text-center display-4 mt-3"),  # Earth emoji
+                                dbc.CardBody([
+                                    html.H4("CO₂ Savings", className="card-title text-center", style={"color": "#008000"}),
+                                    html.H2("127 kg", className="text-center my-3"),  # Demo value
+                                    html.P("Equivalent to planting 6 trees", 
+                                        className="card-text text-center", 
+                                        style={"color": "#008000"})
+                                ])
+                            ],
+                            className="h-100",
+                            style={
+                                "border-radius": "15px",
+                                "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                "border-top": "4px solid #28a745"  # Green accent
+                            }
+                        ),
+                        md=4, className="mb-4"
+                    ),
+                    
+                    # Card 2: Energy Efficiency
+                    dbc.Col(
+                        dbc.Card(
+                            [
+                                html.Div("⚡", className="text-center display-4 mt-3"),  # Lightning emoji
+                                dbc.CardBody([
+                                    html.H4("Energy Saved", className="card-title text-center", style={"color": "#008000"}),
+                                    html.H2("342 kWh", className="text-center my-3"),  # Demo value
+                                    html.P("Enough to power a home for 11 days", 
+                                        className="card-text text-center", 
+                                        style={"color": "#008000"})
+                                ])
+                            ],
+                            className="h-100",
+                            style={
+                                "border-radius": "15px",
+                                "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                "border-top": "4px solid #ffc107"  # Yellow accent
+                            }
+                        ),
+                        md=4, className="mb-4"
+                    ),
+                    
+                    # Card 3: Alternative Transport
+                    dbc.Col(
+                        dbc.Card(
+                            [
+                                html.Div("🚲", className="text-center display-4 mt-3"),  # Bike emoji
+                                dbc.CardBody([
+                                    html.H4("Green Miles", className="card-title text-center", style={"color": "#008000"}),
+                                    html.H2("89 km", className="text-center my-3"),  # Demo value
+                                    html.P("Using bikes/public transport instead of cars", 
+                                        className="card-text text-center", 
+                                        style={"color": "#008000"})
+                                ])
+                            ],
+                            className="h-100",
+                            style={
+                                "border-radius": "15px",
+                                "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                "border-top": "4px solid #17a2b8"  # Teal accent
+                            }
+                        ),
+                        md=4, className="mb-4"
+                    )
+                ], justify="center", className="g-4")
+            ], fluid="md")
+        ], className="py-4")
 
     else:  # Standard-Homepage (z.B. Startseite)
         return html.Div([
