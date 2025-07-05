@@ -137,6 +137,33 @@ def display_page(pathname):
         ])
 
     elif pathname == "/dashboard":
+        monthly_savings = {
+            'Months': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'CO2 Saved (kg)': [13, 16, 21, 18, 19, 23, 
+                            17, 0, 0, 0, 0, 0]  # Sum should be ~127kg
+        }
+        
+        # Create the figure
+        fig = {
+            'data': [
+                {
+                    'x': monthly_savings['Months'],
+                    'y': monthly_savings['CO2 Saved (kg)'],
+                    'type': 'bar',
+                    'name': 'CO₂ Savings',
+                    'marker': {'color': '#28a745'}
+                }
+            ],
+            'layout': {
+                'title': 'Monthly CO₂ Savings (Total: 127 kg)',
+                'xaxis': {'title': 'Month'},
+                'yaxis': {'title': 'CO₂ Saved (kg)'},
+                'plot_bgcolor': 'rgba(0,0,0,0)',
+                'paper_bgcolor': 'rgba(0,0,0,0)',
+                'font': {'color': '#008000'}
+            }
+        }
         return html.Div([
             # Header section
             html.Div([
@@ -220,7 +247,26 @@ def display_page(pathname):
                         md=4, className="mb-4"
                     )
                 ], justify="center", className="g-4")
-            ], fluid="md")
+            ], fluid="md"),
+            dbc.Container([
+                dbc.Card([
+                    dbc.CardHeader("CO₂ Savings Over Time (Year-to-Date)", className="text-success", style={"font-weight": "bold"}),
+                    dbc.CardBody([
+                        dcc.Graph(
+                            id='co2-graph',
+                            figure=fig,
+                            config={'displayModeBar': False}
+                        ),
+                        
+                    html.P("Your monthly CO₂ savings from using sustainable transportation options.",
+                        className="text-muted text-center mt-2"), 
+                    html.P("Remember: Your annual CO₂ emissions are on average 10.3 tons", 
+                        className="text-muted text-center mt-2"), 
+
+                    ])
+                ], className="mt-4",
+                style={"border-radius": "15px", "box-shadow": "0 4px 8px rgba(0,0,0,0.1)"})
+            ], fluid="md", className="mb-5")
         ], className="py-4")
 
     else:  # Standard-Homepage (z.B. Startseite)
