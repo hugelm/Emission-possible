@@ -54,24 +54,88 @@ dcc.Location(id="url", refresh=False),  # 🔹 URL-Tracking-Element
 )
 def display_page(pathname):
     if pathname == "/login":
-        return html.Div([
-            html.H2("Saving the World? There's a Login for that 🌲", className="h2"),
-            dbc.Container([
-                dbc.Row(dbc.Col(dbc.Input(placeholder="Enter username...", className="logInFelder", type="text"), width=6), justify="center"),
-                dbc.Row(dbc.Col(dbc.Input(placeholder="Enter password...", type="password"), width=6), justify="center"),
-                dbc.Row(dbc.Col(dbc.Button("Log In", href="/dashboard", color="primary"), width=6, className="buttonLogIn"), justify="center"),
-            ], className="mt-4")
-        ])
+        return html.Div(
+            style={
+                'background-image': 'url("/assets/WaldVogelperspektive.jpg")',
+                'background-size': 'cover',
+                'height': '100vh',
+                'display': 'flex',
+                'justify-content': 'center',
+                'align-items': 'center',
+                'padding': '20px'
+            },
+            children=dbc.Card(
+                style={
+                    'width': '400px',
+                    'padding': '2rem',
+                    'border-radius': '15px',
+                    'box-shadow': '0 10px 20px rgba(0,0,0,0.1)',
+                    'background': 'rgba(255,255,255,0.95)'
+                },
+                children=[
+                    html.Div(
+                        className="text-center mb-4",
+                        children=[
+                            html.Img(src="/assets/Bild4.png", style={'height': '80px'}),
+                            html.H2("Welcome Back", style={'color': '#28a745', 'margin-top': '1rem'})
+                        ]
+                    ),
+                    dbc.Input(placeholder="Email", type="email", className="mb-3"),
+                    dbc.Input(placeholder="Password", type="password", className="mb-4"),
+                    dbc.Button("Login", 
+                            color="success", 
+                            className="w-100 mb-3",
+                            href="/dashboard"),
+                    html.Div(
+                        className="text-center mt-3",
+                        children=[
+                            html.Span("Don't have an account? "),
+                            html.A("Register here", href="/register", style={'color': '#28a745'})
+                        ]
+                    )
+                ]
+            )
+        )
 
     if pathname == "/register":
-        return html.Div([
-            html.H2("The Road to Sustainability Starts Here. 🌍", className="h2"),
-            dbc.Container([
-                dbc.Row(dbc.Col(dbc.Input(placeholder="Enter email...", className="logInFelder", type="text"), width=6), justify="center"),
-                dbc.Row(dbc.Col(dbc.Input(placeholder="Enter password...", type="password"), width=6), justify="center"),
-                dbc.Row(dbc.Col(dbc.Button("Register", href="/dashboard", color="primary"), width=6, className="buttonLogIn"), justify="center"),
-            ], className="mt-4")
-        ])
+        return html.Div(
+            style={
+                'background-image': 'url("/assets/WaldVogelperspektive.jpg")',
+                'background-size': 'cover',
+                'height': '100vh',
+                'display': 'flex',
+                'justify-content': 'center',
+                'align-items': 'center',
+                'padding': '20px'
+            },
+            children=dbc.Card(
+                style={
+                    'width': '400px',
+                    'padding': '2rem',
+                    'border-radius': '15px',
+                    'box-shadow': '0 10px 20px rgba(0,0,0,0.1)',
+                    'background': 'rgba(255,255,255,0.95)'
+                },
+                children=[
+                    html.Div(
+                        className="text-center mb-4",
+                        children=[
+                            html.Img(src="/assets/Bild4.png", style={'height': '80px'}),
+                            html.H2("Welcome to E-Mission Possible", style={'color': '#28a745', 'margin-top': '1rem'})
+                        ]
+                    ),
+                    dbc.Input(placeholder="First name", type="name", className="mb-3"),
+                    dbc.Input(placeholder="Last name", type="name", className="mb-3"),
+                    dbc.Input(placeholder="Email", type="email", className="mb-3"),
+                    dbc.Input(placeholder="Password", type="password", className="mb-4"),
+                    dbc.Button("Register", 
+                            color="success", 
+                            className="w-100 mb-3",
+                            href="/dashboard"),
+                    
+                ]
+            )
+        )
     
     elif pathname == "/about":
         return html.Div([html.H2("About Us", className="text-center"), html.P("This is the about page.")])
@@ -269,15 +333,17 @@ def display_page(pathname):
                         # CO2 Graph
                         dbc.Container([
                             dbc.Card([
-                                dbc.CardHeader("CO₂ Savings Over Time", className="text-success", style={"font-weight": "bold"}),
+                                dbc.CardHeader("CO₂ Savings Over Time (Year-to-Date)", className="text-success", style={"font-weight": "bold"}),
                                 dbc.CardBody([
                                     dcc.Graph(
                                         id='co2-graph',
                                         figure=fig,
                                         config={'displayModeBar': False}
                                     ),
-                                    html.P("Your monthly CO₂ savings from sustainable transportation options.", 
-                                        className="text-muted text-center mt-2")
+                                    html.P("Your monthly CO₂ savings from using sustainable transportation options.",
+                                        className="text-muted text-center mt-2"), 
+                                    html.P("Remember: Your annual CO₂ emissions are on average 10.3 tons", 
+                                        className="text-muted text-center mt-2"),
                                 ])
                             ], className="mt-4",
                             style={"border-radius": "15px", "box-shadow": "0 4px 8px rgba(0,0,0,0.1)"})
