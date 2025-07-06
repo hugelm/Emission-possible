@@ -4,7 +4,6 @@ import distanceAPIGraphHopper
 import ssl
 import certifi
 import geopy.geocoders
-from dash import dcc
 import plotly.graph_objs as go
 
 geopy.geocoders.options.default_ssl_context = ssl.create_default_context(cafile=certifi.where())
@@ -83,6 +82,7 @@ def display_page(pathname):
 
                                     dbc.Button(
                                         "Log In",
+                                        href="/",
                                         color="success",
                                         size="lg",
                                         className="w-100 fw-bold"
@@ -109,6 +109,16 @@ def display_page(pathname):
                                             className="text-center fw-bold mb-4 text-success display-5"),
 
                                     dbc.Input(
+                                        placeholder="Enter your name...",
+                                        type="text",
+                                        className="mb-4 form-control-lg"
+                                    ),
+                                    dbc.Input(
+                                        placeholder="Enter email...",
+                                        type="text",
+                                        className="mb-4 form-control-lg"
+                                    ),
+                                    dbc.Input(
                                         placeholder="Enter username...",
                                         type="text",
                                         className="mb-4 form-control-lg"
@@ -121,6 +131,7 @@ def display_page(pathname):
 
                                     dbc.Button(
                                         "Register",
+                                        href="/login",
                                         color="success",
                                         size="lg",
                                         className="w-100 fw-bold"
@@ -163,7 +174,7 @@ def display_page(pathname):
     elif pathname == "/contact":
         return html.Div([
             dbc.Container([
-                html.H2("📬 Contact Us", className="text-center text-primary my-5 fw-bold display-5"),
+                html.H2("📬 Contact Us", className="text-center text-success my-5 fw-bold display-5"),
 
                 dbc.Row([
                     dbc.Col([
