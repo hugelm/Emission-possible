@@ -16,7 +16,7 @@ def geocode_address(address):
     else:
         print(f"Address {address} could not be geocoded.")
 
-def get_distance_and_duration(input_start, input_destination, api_key=api_key):
+def get_distance_and_duration(input_start, input_destination, input_vehicle, api_key=api_key):
 
     input_start = geocode_address(input_start)
     input_destination = geocode_address(input_destination)
@@ -24,7 +24,7 @@ def get_distance_and_duration(input_start, input_destination, api_key=api_key):
     api_url = (f"https://graphhopper.com/api/1/route?"
                f"point={input_start}&"
                f"point={input_destination}&"
-               f"profile=car&"
+               f"profile={input_vehicle}&"
                f"instructions=false&"
                f"key={api_key}"
                )
@@ -34,16 +34,16 @@ def get_distance_and_duration(input_start, input_destination, api_key=api_key):
 
     if response.status_code == 200:
 
-        route_calculation = data["paths"][0]
-        distance = route_calculation["distance"]
-        distance_in_km = distance/1000
-        duration = route_calculation["time"]
-        duration_in_min = duration/60/1000
+        data = response.json()
+        route = data["paths"][0]
+        distance_m = route["distance"]  # meters
+        duration_ms = route["time"]     # milliseconds
 
-        return "It takes "+str(round(duration_in_min,2))+"min and "+str(round(distance_in_km,2))+"km.", "success"
+        distance_km = distance_m / 1000
+        duration_min = duration_ms / 1000 / 60
+
+        return distance_km, duration_min, "success"
 
     else:
 
-        return response.text, "danger"
-
-#print(get_distance_and_duration("Mainz", "Mannheim"))
+        return None, None, response.text

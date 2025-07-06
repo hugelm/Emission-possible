@@ -4,6 +4,8 @@ import distanceAPIGraphHopper
 import ssl
 import certifi
 import geopy.geocoders
+from dash import dcc
+import plotly.graph_objs as go
 
 geopy.geocoders.options.default_ssl_context = ssl.create_default_context(cafile=certifi.where())
 
@@ -195,7 +197,7 @@ def display_page(pathname):
         ])
 
 
-    else:  # Standard-Homepage (z.B. Startseite)
+    else:  # Homepage / Calculator Page
         return html.Div([
             dbc.Carousel(
                 items=[
@@ -205,48 +207,150 @@ def display_page(pathname):
                 ],
                 controls=True,
                 indicators=True,
-                interval=2000,
+                interval=3000,
                 ride="carousel",
-                className="carousel"
+                className="carousel mb-5"
             ),
+
             dbc.Container([
-                dbc.Row(
-                    dbc.Col(
-                        html.Div([
-                            html.H1("E-Mission Possible", className="display-3 text-center fw-bold"),
-                            html.H3("Distance and Travel Time Calculator", className="lead text-center text-muted"),
-                            html.H6("To enjoy the full dashboard experience, please log in.", className="display-8 lead text-center text-muted"),
-                        ]),
-                        width=12,
-                    ),
-                    className="my-4",
-                    justify="center",
-                ),
                 dbc.Row([
-                    dbc.Col(dbc.Input(id="input-start", placeholder="Enter start location...", type="text"), width=5),
-                    dbc.Col(dbc.Input(id="input-destination", placeholder="Enter destination...", type="text"), width=5),
-                    dbc.Col(dbc.Button("Calculate", id="btn-calculate", color="primary"), width=2),
-                ], className="mb-3"),
-                dcc.Loading(
-                    id="loading-1",
-                    type="dot",
-                    children=[dbc.Alert("Hello Bootstrap!", color="primary", id="alert-calculation")]
-                ),
-            ], fluid=True)
+                    dbc.Col([
+                        html.Div([
+                            html.H1("E-Mission Possible", className="display-3 fw-bold text-success text-center"),
+                            html.H4("Plan Smarter. Travel Greener.", className="text-muted text-center mb-4"),
+                        ])
+                    ], width=12)
+                ], justify="center"),
+
+                dbc.Row([
+                    dbc.Col(dbc.Input(
+                        id="input-start",
+                        placeholder="🌍 Start location...",
+                        type="text",
+                        className="form-control-lg"
+                    ), width=4),
+
+                    dbc.Col(dbc.Input(
+                        id="input-destination",
+                        placeholder="🚩 Destination...",
+                        type="text",
+                        className="form-control-lg"
+                    ), width=4),
+
+                    dbc.Col(
+                        dcc.Dropdown(
+                            id="input-vehicle",
+                            options=[
+                                {"label": "Car", "value": "car"},
+                                {"label": "Bike", "value": "bike"},
+                                {"label": "Walk", "value": "foot"},
+                            ],
+                            value="car",
+                            clearable=False,
+                            style={"width": "100%", "height": "40px", "fontSize": "1.1rem"}
+                        ),
+                        width=2,
+                        className="d-flex align-items-center"
+                    ),
+
+                    dbc.Col(dbc.Button(
+                        "Calculate",
+                        id="btn-calculate",
+                        color="success",
+                        size="lg",
+                        className="w-100"
+                    ), width=2),
+                ], className="mb-4"),
+
+                dbc.Row([
+                    dbc.Col([
+                        dcc.Loading(
+                            id="loading-1",
+                            type="circle",
+                            color="#198754",  # Bootstrap green
+                            children=[
+                                dbc.Alert("Please enter a route to get started.",
+                                          color="light",
+                                          id="alert-calculation",
+                                          className="text-center fw-semibold shadow-sm")
+                            ]
+                        )
+                    ], width=12)
+                ])
+            ], fluid=True, className="py-5")
         ])
 
-# Callback function for calculating the distance and time
+# Callback function for calculating the distance and time via API
 @app.callback(
     [Output("alert-calculation", "children"),
      Output("alert-calculation", "color")],
     Input("btn-calculate", "n_clicks"),
     State("input-start", "value"),
     State("input-destination", "value"),
+    State("input-vehicle", "value"),
 )
-def calculate_distance_time(n_clicks, start, destination):
+def calculate_distance_time(n_clicks, start, destination, vehicle):
     if not start or not destination:
         return "Please insert start location and destination.", "warning"
-    return distanceAPIGraphHopper.get_distance_and_duration(start, destination)
+
+    distance_km, duration_min, status = distanceAPIGraphHopper.get_distance_and_duration(start, destination, vehicle)
+    if status != "success":
+        return f"Error: {status}", "danger"
+
+    stats_card = eco_stats_card(distance_km, duration_min, vehicle)
+    co2_graph = co2_emissions_graph(distance_km)
+
+    return html.Div([stats_card, co2_graph]), "success"
+
+# Stats
+
+def eco_stats_card(distance_km, duration_min, vehicle):
+    co2_per_km_map = {
+        "car": 120,
+        "bike": 0,
+        "foot": 0,
+    }
+    co2_per_km = co2_per_km_map.get(vehicle)
+    co2_saved = distance_km * co2_per_km  # you can improve this logic for savings compared to car
+
+    calories_burned = distance_km * (50 if vehicle in ["bike", "foot"] else 0)
+    trees_needed = co2_saved / 21000
+
+    return dbc.Card([
+        dbc.CardBody([
+            html.H4("Your Eco Impact", className="card-title text-success mb-3"),
+            html.P(f"Distance: {distance_km:.2f} km"),
+            html.P(f"Estimated Time: {duration_min:.0f} min"),
+            html.P(f"CO₂ Emissions: {co2_saved/1000:.2f} kg 🌿"),
+            html.P(f"Calories Burned: {calories_burned:.0f} kcal 🚴" if calories_burned > 0 else ""),
+            html.P(f"Equivalent to offset by {trees_needed:.1f} trees 🌳"),
+        ])
+    ], className="shadow-sm bg-light border-success mt-4")
+
+# Graphs
+
+def co2_emissions_graph(distance_km):
+    co2_car = distance_km * 120  # grams CO2
+    co2_bike = 0
+    co2_public_transport = distance_km * 60  # example number
+
+    data = [
+        go.Bar(name='Car', x=['CO₂ Emissions'], y=[co2_car]),
+        go.Bar(name='Bike/Walk', x=['CO₂ Emissions'], y=[co2_bike]),
+        go.Bar(name='Public Transport', x=['CO₂ Emissions'], y=[co2_public_transport]),
+    ]
+
+    layout = go.Layout(
+        title="CO₂ Emissions Comparison (grams)",
+        yaxis=dict(title="Grams CO₂"),
+        barmode='group',
+        plot_bgcolor='rgba(0,0,0,0)',  # transparent background
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+
+    fig = go.Figure(data=data, layout=layout)
+    return dcc.Graph(figure=fig)
+
 
 if __name__ == "__main__":
     app.run_server(debug=True, port=8080)
