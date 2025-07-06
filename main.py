@@ -141,59 +141,69 @@ def display_page(pathname):
 
     elif pathname == "/resources":
         return html.Div([
-            html.H2("📘 Educational Resources", className="text-center my-5 fw-bold text-primary"),
+            html.H2("📘 Educational Resources", className="text-center mt-5 mb-4 fw-bold text-success display-5"),
 
             dbc.Container([
-
-                # Section 1 – Understanding the Problem
                 dbc.Row([
-                    dbc.Col([
-                        html.Img(src="/assets/Bild2.jpg",
-                                 className="img-fluid rounded shadow-sm mb-3",
-                                 style={"maxHeight": "250px", "width": "100%"}),
-                        html.H4("🌍 The Impact of Transportation", className="fw-semibold text-success"),
-                        html.P("Transportation is a major contributor to CO₂ emissions, air pollution, and noise. "
-                               "Learn how small changes in our travel habits can create a big difference."),
-                    ], width=6),
+                    dbc.Col(
+                        dbc.Card([
+                            dbc.CardImg(src="/assets/Bild2.jpg", top=True, className="img-fluid rounded-top shadow-sm", style={"maxHeight": "180px", "objectFit": "cover"}),
+                            dbc.CardBody([
+                                html.H5("🌍 The Impact of Transportation", className="card-title text-success fw-semibold"),
+                                html.P("Transportation contributes heavily to CO₂, noise, and air pollution. Learn how everyday travel shapes the climate.",
+                                       className="card-text small")
+                            ])
+                        ], className="shadow-sm h-100"),
+                        md=6, xl=5, className="mb-4"
+                    ),
 
-                    dbc.Col([
-                        html.Img(src="/assets/Bild3.jpg",
-                                 className="img-fluid rounded shadow-sm mb-3",
-                                 style={"maxHeight": "250px", "width": "100%"}),
-                        html.H4("♻️ Why Sustainable Mobility Matters", className="fw-semibold text-info"),
-                        html.P("Public transport, cycling, and walking not only reduce emissions, but also improve health "
-                               "and city life. Explore how eco-friendly travel can shape a greener future."),
-                    ], width=6),
-                ], className="mb-5"),
+                    dbc.Col(
+                        dbc.Card([
+                            dbc.CardImg(src="/assets/Bild3.jpg", top=True, className="img-fluid rounded-top shadow-sm", style={"maxHeight": "180px", "objectFit": "cover"}),
+                            dbc.CardBody([
+                                html.H5("♻️ Why Sustainable Mobility Matters", className="card-title text-info fw-semibold"),
+                                html.P("Biking, walking, and transit help health and planet. See how small shifts lead to big climate wins.",
+                                       className="card-text small")
+                            ])
+                        ], className="shadow-sm h-100"),
+                        md=6, xl=5, className="mb-4"
+                    )
+                ], justify="center"),
 
-                # Section 2 – Interactive Tools
                 dbc.Row([
-                    dbc.Col([
-                        html.H4("🧪 Interactive Learning Tools", className="fw-semibold text-primary mb-3"),
-                        html.P("Explore these tools to better understand climate and transport issues:"),
-                        html.Ul([
-                            html.Li(html.A("🌡️ Carbon Footprint Calculator", href="https://www.carbonfootprint.com/calculator.aspx", target="_blank")),
-                            html.Li(html.A("🚀 NASA Climate Kids", href="https://climatekids.nasa.gov", target="_blank")),
-                            html.Li(html.A("🗺️ Sustainable Journey Game", href="https://www.cooltheearth.org", target="_blank")),
-                            html.Li(html.A("📈 Emission Dashboard – Our World in Data", href="https://ourworldindata.org/co2-emissions", target="_blank")),
-                        ])
-                    ])
-                ], className="mb-5"),
+                    dbc.Col(
+                        dbc.Card([
+                            dbc.CardBody([
+                                html.H5("🧪 Interactive Learning Tools", className="card-title text-primary fw-bold"),
+                                html.P("Explore these tools to better understand your impact and climate-friendly options.", className="small"),
+                                html.Ul([
+                                    html.Li(html.A("🌡️ Carbon Footprint Calculator", href="https://www.carbonfootprint.com/calculator.aspx", target="_blank", className="link-success")),
+                                    html.Li(html.A("🚀 NASA Climate Kids", href="https://climatekids.nasa.gov", target="_blank", className="link-success")),
+                                    html.Li(html.A("🗺️ Sustainable Journey Game", href="https://www.cooltheearth.org", target="_blank", className="link-success")),
+                                    html.Li(html.A("📈 Emission Dashboard – Our World in Data", href="https://ourworldindata.org/co2-emissions", target="_blank", className="link-success")),
+                                ], className="ms-3")
+                            ])
+                        ], className="shadow-sm h-100"),
+                        md=6, xl=5, className="mb-4"
+                    ),
 
-                # Section 3 – Further Reading
-                dbc.Row([
-                    dbc.Col([
-                        html.H4("📚 Dive Deeper: Further Reading", className="fw-semibold text-warning mb-3"),
-                        html.P("Trusted sources to expand your knowledge:"),
-                        html.Ul([
-                            html.Li(html.A("EPA – Transportation & Air Pollution", href="https://www.epa.gov/transportation-air-pollution-and-climate-change", target="_blank")),
-                            html.Li(html.A("United Nations – Sustainable Transport", href="https://www.un.org/en/climatechange/transport", target="_blank")),
-                            html.Li(html.A("IPCC Reports on Global Climate", href="https://www.ipcc.ch/reports/", target="_blank")),
-                        ])
-                    ])
-                ])
+                    dbc.Col(
+                        dbc.Card([
+                            dbc.CardBody([
+                                html.H5("📚 Dive Deeper into the Science", className="card-title text-warning fw-bold"),
+                                html.P("Ready for expert-level content? These sources provide the full science behind mobility and climate.", className="small"),
+                                html.Ul([
+                                    html.Li(html.A("🌐 EPA – Transportation & Air Pollution", href="https://www.epa.gov/transportation-air-pollution-and-climate-change", target="_blank", className="link-warning")),
+                                    html.Li(html.A("🚉 UN – Sustainable Transport", href="https://www.un.org/en/climatechange/transport", target="_blank", className="link-warning")),
+                                    html.Li(html.A("📊 IPCC Reports on Global Climate", href="https://www.ipcc.ch/reports/", target="_blank", className="link-warning")),
+                                ], className="ms-3")
+                            ])
+                        ], className="shadow-sm h-100"),
+                        md=6, xl=5, className="mb-4"
+                    )
+                ], justify="center")
 
-            ], fluid=True, className="px-4")
+            ], fluid=True, className="px-4 pb-5")
         ])
 
 
