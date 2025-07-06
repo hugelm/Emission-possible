@@ -248,7 +248,7 @@ def display_page(pathname):
                     dbc.Col([
                         # Header section
                         html.Div([
-                            html.H2("Your Sustainability Dashboard", 
+                            html.H2("Sustainability Dashboard", 
                                 className="text-center mb-3",
                                 style={"font-weight": "bolder", "font-size": "3em"}), 
                             html.P("Track your eco-friendly progress with E-Mission Possible", 
@@ -351,53 +351,80 @@ def display_page(pathname):
                     ], width=10),
                     
                     # Badge sidebar (2/12 width)
-                    dbc.Col([
+                      dbc.Col([
                         html.Div(
                             [
+                                # Neuer "Start new Navigation" Button
                                 html.Div(
-                                    "Your Badges",
-                                    className="text-center fw-bold py-2",
-                                    style={
-                                        "background": "#28a745",
-                                        "color": "white",
-                                        "border-radius": "5px 5px 0 0",
-                                        "font-size": "1.1rem"
-                                    }
+                                    [
+                                        dbc.Button(
+                                            "Start new Navigation",
+                                            href="/",  # oder deine Navigations-URL
+                                            color="success",
+                                            className="w-100 py-3 fw-bold",
+                                            style={
+                                                "border-radius": "5px",
+                                                "font-size": "1.1rem",
+                                                "background": "#28a745",
+                                                "border": "none",
+                                                "box-shadow": "0 2px 5px rgba(0,0,0,0.1)"
+                                            }
+                                        )
+                                    ],
+                                    className="mb-3"
                                 ),
+                                
+                                # Existierende Badges Section
                                 html.Div(
                                     [
                                         html.Div(
+                                            "Your Badges",
+                                            className="text-center fw-bold py-2",
+                                            style={
+                                                "background": "#28a745",
+                                                "color": "white",
+                                                "border-radius": "5px 5px 0 0",
+                                                "font-size": "1.1rem"
+                                            }
+                                        ),
+                                        html.Div(
                                             [
-                                                html.Span(badge["icon"], className="me-2", style={"font-size": "1.8rem"}),
                                                 html.Div(
                                                     [
-                                                        html.Strong(badge["name"], className="d-block"),
-                                                        html.Small(badge["description"], className="text-muted")
+                                                        html.Span(badge["icon"], className="me-2", style={"font-size": "1.8rem"}),
+                                                        html.Div(
+                                                            [
+                                                                html.Strong(badge["name"], className="d-block"),
+                                                                html.Small(badge["description"], className="text-muted")
+                                                            ],
+                                                            className="d-inline-block"
+                                                        )
                                                     ],
-                                                    className="d-inline-block"
-                                                )
+                                                    className="p-3 border-bottom",
+                                                    style={
+                                                        "background": "#e8f5e9" if badge["earned"] else "#f8f9fa",
+                                                        "border-left": "4px solid #28a745" if badge["earned"] else "none",
+                                                        "transition": "all 0.3s"
+                                                    }
+                                                ) for badge in badges
                                             ],
-                                            className="p-3 border-bottom",
                                             style={
-                                                "background": "#e8f5e9" if badge["earned"] else "#f8f9fa",
-                                                "border-left": "4px solid #28a745" if badge["earned"] else "none",
-                                                "transition": "all 0.3s"
+                                                "background": "#f8f9fa",
+                                                "border-radius": "0 0 5px 5px",
+                                                "height": "calc(90vh - 70px)",  # Angepasste Höhe
+                                                "overflow-y": "auto"
                                             }
-                                        ) for badge in badges
+                                        )
                                     ],
                                     style={
-                                        "background": "#f8f9fa",
-                                        "border-radius": "0 0 5px 5px",
-                                        "height": "90vh",
-                                        "overflow-y": "auto"
+                                        "border-radius": "5px",
+                                        "box-shadow": "0 2px 5px rgba(0,0,0,0.1)"
                                     }
                                 )
                             ],
                             style={
                                 "position": "sticky",
                                 "top": "20px",
-                                "border-radius": "5px",
-                                "box-shadow": "0 2px 5px rgba(0,0,0,0.1)",
                                 "width": "100%"
                             }
                         )
@@ -465,7 +492,7 @@ def display_page(pathname):
                     dbc.Col([
                         # Header section
                         html.Div([
-                            html.H2("Your Sustainability Dashboard", 
+                            html.H2("Sustainability Dashboard", 
                                 className="text-center mb-3",
                                 style={"font-weight": "bolder", "font-size": "3em"}), 
                             html.P("Track your eco-friendly progress with E-Mission Possible", 
