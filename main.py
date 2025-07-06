@@ -15,34 +15,32 @@ app = Dash(
 app._favicon = "logo.jpg"
 
 app.layout = html.Div([
-dcc.Location(id="url", refresh=False),  # 🔹 URL-Tracking-Element
-    
-    # Navbar bleibt immer sichtbar
+dcc.Location(id="url", refresh=False),
+
     dbc.Navbar(
         dbc.Container([
-            dbc.NavbarSimple(
-                children=[
-                    dbc.NavItem(dbc.NavLink("Calculator", href="/")),
-                    dbc.NavItem(dbc.NavLink("Educational Resources", href="/resources")),
-                    dbc.NavItem(dbc.NavLink("About", href="/about")),
-                    dbc.NavItem(dbc.NavLink("Contact", href="/contact")),
-                ],
-                className="ms-auto",
-                color="transparent",
-                dark=True,
-            ),
-            dbc.NavItem(
-                dbc.Button("Log In", href="/login", color="primary", outline=False, className="ms-2 fw-semibold shadow-sm")
-            ),
-            dbc.NavItem(
-                dbc.Button("Register", href="/register", color="primary", outline=False, className="ms-2 fw-semibold shadow-sm")
-            ),
+
+            dbc.NavbarBrand("🌱 E-Mission Possible", href="/", className="fw-bold text-white"),
+
+            dbc.Nav([
+                dbc.NavItem(dbc.NavLink("Calculator", href="/", className="text-white")),
+                dbc.NavItem(dbc.NavLink("Educational Resources", href="/resources", className="text-white")),
+                dbc.NavItem(dbc.NavLink("About", href="/about", className="text-white")),
+                dbc.NavItem(dbc.NavLink("Contact", href="/contact", className="text-white")),
+                dbc.NavItem(dbc.Button("Log In", href="/login", color="light", outline=True, className="ms-3")),
+                dbc.NavItem(dbc.Button("Register", href="/register", color="light", outline=True, className="ms-3")),
+            ], className="ms-auto", navbar=True),
+
         ], fluid=True),
-        color="transparent",
+
+        style={
+            "background": "linear-gradient(90deg, #2e7d32, #66bb6a)",
+            "boxShadow": "0 3px 8px rgba(0, 0, 0, 0.2)",
+        },
         dark=True,
+        sticky="top",
     ),
-    
-    # Hier wird die Seite dynamisch aktualisiert
+
     html.Div(id="page-content")
 ])
 
@@ -54,24 +52,85 @@ dcc.Location(id="url", refresh=False),  # 🔹 URL-Tracking-Element
 def display_page(pathname):
     if pathname == "/login":
         return html.Div([
-            html.H2("Saving the World? There's a Login for that 🌲", className="h2"),
             dbc.Container([
-                dbc.Row(dbc.Col(dbc.Input(placeholder="Enter username...", className="logInFelder", type="text"), width=6), justify="center"),
-                dbc.Row(dbc.Col(dbc.Input(placeholder="Enter password...", type="password"), width=6), justify="center"),
-                dbc.Row(dbc.Col(dbc.Button("Log In", color="primary"), width=6, className="buttonLogIn"), justify="center"),
-            ], className="mt-4")
+                dbc.Row([
+                    dbc.Col([
+                        dbc.Card([
+                            dbc.CardBody([
+                                html.Div([
+
+                                    html.Img(
+                                        src="assets/save-the-planet.png",
+                                        height="90px",
+                                        className="d-block mx-auto mb-3"
+                                    ),
+
+                                    html.H2("Saving the World? There's a Login for that",
+                                            className="text-center fw-bold mb-4 text-success display-5"),
+
+                                    dbc.Input(
+                                        placeholder="Enter username...",
+                                        type="text",
+                                        className="mb-4 form-control-lg"
+                                    ),
+                                    dbc.Input(
+                                        placeholder="Enter password...",
+                                        type="password",
+                                        className="mb-4 form-control-lg"
+                                    ),
+
+                                    dbc.Button(
+                                        "Log In",
+                                        color="success",
+                                        size="lg",
+                                        className="w-100 fw-bold"
+                                    ),
+                                ])
+                            ])
+                        ], className="shadow-lg rounded-4 p-5 bg-white")
+                    ], width=10, lg=8, xl=7)
+                ], justify="center", className="mt-5")
+            ], className="vh-100 d-flex align-items-center justify-content-center")
         ])
+
 
     if pathname == "/register":
         return html.Div([
-            html.H2("Join the E-Mission to a Cleaner Future 🌍", className="h2"),
             dbc.Container([
-                dbc.Row(dbc.Col(dbc.Input(placeholder="Enter email...", className="logInFelder", type="text"), width=6), justify="center"),
-                dbc.Row(dbc.Col(dbc.Input(placeholder="Enter password...", type="password"), width=6), justify="center"),
-                dbc.Row(dbc.Col(dbc.Button("Register", color="primary"), width=6, className="buttonLogIn"), justify="center"),
-            ], className="mt-4")
+                dbc.Row([
+                    dbc.Col([
+                        dbc.Card([
+                            dbc.CardBody([
+                                html.Div([
+
+                                    html.H2("Join the E-Mission to a Cleaner Future 🌍",
+                                            className="text-center fw-bold mb-4 text-success display-5"),
+
+                                    dbc.Input(
+                                        placeholder="Enter username...",
+                                        type="text",
+                                        className="mb-4 form-control-lg"
+                                    ),
+                                    dbc.Input(
+                                        placeholder="Enter password...",
+                                        type="password",
+                                        className="mb-4 form-control-lg"
+                                    ),
+
+                                    dbc.Button(
+                                        "Register",
+                                        color="success",
+                                        size="lg",
+                                        className="w-100 fw-bold"
+                                    ),
+                                ])
+                            ])
+                        ], className="shadow-lg rounded-4 p-5 bg-white")
+                    ], width=10, lg=8, xl=7)
+                ], justify="center", className="mt-5")
+            ], className="vh-100 d-flex align-items-center justify-content-center")
         ])
-    
+
     elif pathname == "/about":
         return html.Div([html.H2("About Us", className="text-center"), html.P("This is the about page.")])
 
