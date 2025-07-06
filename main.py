@@ -134,10 +134,61 @@ def display_page(pathname):
         ])
 
     elif pathname == "/about":
-        return html.Div([html.H2("About Us", className="text-center"), html.P("This is the about page.")])
+        return html.Div([
+            dbc.Container([
+                html.H2("🌍 About E-Mission Possible", className="text-center text-success my-5 fw-bold display-5"),
+
+                dbc.Row([
+                    dbc.Col([
+                        html.P("""
+                    E-Mission Possible is your interactive guide to sustainable travel. 
+                    Our mission is to raise awareness about CO₂ emissions and empower individuals 
+                    to make informed transportation choices.
+                """, className="lead text-muted"),
+
+                        html.P("""
+                    Through tools, statistics, and engaging visuals, we help you explore the impact 
+                    of your daily commutes and journeys. Whether you're biking, walking, or driving — 
+                    we're here to help you understand and reduce your carbon footprint.
+                """, className="text-muted"),
+
+                        html.P("""
+                    Together, let's make green choices — one trip at a time.
+                """, className="text-muted fst-italic"),
+                    ], width=10)
+                ], justify="center")
+            ], className="pb-5")
+        ])
 
     elif pathname == "/contact":
-        return html.Div([html.H2("Contact Us", className="text-center"), html.P("You can reach us at contact@example.com.")])
+        return html.Div([
+            dbc.Container([
+                html.H2("📬 Contact Us", className="text-center text-primary my-5 fw-bold display-5"),
+
+                dbc.Row([
+                    dbc.Col([
+                        html.P("Have questions, feedback, or ideas? We’d love to hear from you!", className="text-muted mb-4"),
+
+                        dbc.Form([
+                            dbc.Row([
+                                dbc.Col(
+                                    dbc.Input(type="text", placeholder="Your Name", className="form-control-lg mb-3"),
+                                    md=6
+                                ),
+                                dbc.Col(
+                                    dbc.Input(type="email", placeholder="Your Email", className="form-control-lg mb-3"),
+                                    md=6
+                                )
+                            ]),
+
+                            dbc.Textarea(placeholder="Your Message...", className="form-control mb-3", rows=5),
+
+                            dbc.Button("Send Message", color="success", className="mt-2 px-4", size="lg")
+                        ])
+                    ], md=10)
+                ], justify="center")
+            ], className="pb-5")
+        ])
 
     elif pathname == "/resources":
         return html.Div([
