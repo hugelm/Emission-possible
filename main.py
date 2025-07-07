@@ -52,97 +52,89 @@ dcc.Location(id="url", refresh=False),
 )
 def display_page(pathname):
     if pathname == "/login":
-        return html.Div([
-            dbc.Container([
-                dbc.Row([
-                    dbc.Col([
-                        dbc.Card([
-                            dbc.CardBody([
-                                html.Div([
-
-                                    html.Img(
-                                        src="assets/save-the-planet.png",
-                                        height="90px",
-                                        className="d-block mx-auto mb-3"
-                                    ),
-
-                                    html.H2("Saving the World? There's a Login for that",
-                                            className="text-center fw-bold mb-4 text-success display-5"),
-
-                                    dbc.Input(
-                                        placeholder="Enter username...",
-                                        type="text",
-                                        className="mb-4 form-control-lg"
-                                    ),
-                                    dbc.Input(
-                                        placeholder="Enter password...",
-                                        type="password",
-                                        className="mb-4 form-control-lg"
-                                    ),
-
-                                    dbc.Button(
-                                        "Log In",
-                                        href="/",
-                                        color="success",
-                                        size="lg",
-                                        className="w-100 fw-bold"
-                                    ),
-                                ])
-                            ])
-                        ], className="shadow-lg rounded-4 p-5 bg-white")
-                    ], width=10, lg=8, xl=7)
-                ], justify="center", className="mt-5")
-            ], className="vh-100 d-flex align-items-center justify-content-center")
-        ])
-
+        return html.Div(
+            style={
+                'background-image': 'url("/assets/WaldVogelperspektive.jpg")',
+                'background-size': 'cover',
+                'height': '100vh',
+                'display': 'flex',
+                'justify-content': 'center',
+                'align-items': 'center',
+                'padding': '20px'
+            },
+            children=dbc.Card(
+                style={
+                    'width': '400px',
+                    'padding': '2rem',
+                    'border-radius': '15px',
+                    'box-shadow': '0 10px 20px rgba(0,0,0,0.1)',
+                    'background': 'rgba(255,255,255,0.95)'
+                },
+                children=[
+                    html.Div(
+                        className="text-center mb-4",
+                        children=[
+                            html.Img(src="/assets/Bild4.png", style={'height': '80px'}),
+                            html.H2("Welcome Back", style={'color': '#28a745', 'margin-top': '1rem'})
+                        ]
+                    ),
+                    dbc.Input(placeholder="Email", type="email", className="mb-3"),
+                    dbc.Input(placeholder="Password", type="password", className="mb-4"),
+                    dbc.Button("Login",
+                               color="success",
+                               className="w-100 mb-3",
+                               href="/dashboard"),
+                    html.Div(
+                        className="text-center mt-3",
+                        children=[
+                            html.Span("Don't have an account? "),
+                            html.A("Register here", href="/register", style={'color': '#28a745'})
+                        ]
+                    )
+                ]
+            )
+        )
 
     if pathname == "/register":
-        return html.Div([
-            dbc.Container([
-                dbc.Row([
-                    dbc.Col([
-                        dbc.Card([
-                            dbc.CardBody([
-                                html.Div([
+        return html.Div(
+            style={
+                'background-image': 'url("/assets/WaldVogelperspektive.jpg")',
+                'background-size': 'cover',
+                'height': '100vh',
+                'display': 'flex',
+                'justify-content': 'center',
+                'align-items': 'center',
+                'padding': '20px'
+            },
+            children=dbc.Card(
+                style={
+                    'width': '400px',
+                    'padding': '2rem',
+                    'border-radius': '15px',
+                    'box-shadow': '0 10px 20px rgba(0,0,0,0.1)',
+                    'background': 'rgba(255,255,255,0.95)'
+                },
+                children=[
+                    html.Div(
+                        className="text-center mb-4",
+                        children=[
+                            html.Img(src="/assets/Bild4.png", style={'height': '80px'}),
+                            html.H2("Welcome to E-Mission Possible", style={'color': '#28a745', 'margin-top': '1rem'})
+                        ]
+                    ),
+                    dbc.Input(placeholder="First name", type="name", className="mb-3"),
+                    dbc.Input(placeholder="Last name", type="name", className="mb-3"),
+                    dbc.Input(placeholder="Email", type="email", className="mb-3"),
+                    dbc.Input(placeholder="Password", type="password", className="mb-4"),
+                    dbc.Button("Register",
+                               color="success",
+                               className="w-100 mb-3",
+                               href="/newlyRegistered"),
 
-                                    html.H2("Join the E-Mission to a Cleaner Future 🌍",
-                                            className="text-center fw-bold mb-4 text-success display-5"),
+                ]
+            )
+        )
 
-                                    dbc.Input(
-                                        placeholder="Enter your name...",
-                                        type="text",
-                                        className="mb-4 form-control-lg"
-                                    ),
-                                    dbc.Input(
-                                        placeholder="Enter email...",
-                                        type="text",
-                                        className="mb-4 form-control-lg"
-                                    ),
-                                    dbc.Input(
-                                        placeholder="Enter username...",
-                                        type="text",
-                                        className="mb-4 form-control-lg"
-                                    ),
-                                    dbc.Input(
-                                        placeholder="Enter password...",
-                                        type="password",
-                                        className="mb-4 form-control-lg"
-                                    ),
-
-                                    dbc.Button(
-                                        "Register",
-                                        href="/login",
-                                        color="success",
-                                        size="lg",
-                                        className="w-100 fw-bold"
-                                    ),
-                                ])
-                            ])
-                        ], className="shadow-lg rounded-4 p-5 bg-white")
-                    ], width=10, lg=8, xl=7)
-                ], justify="center", className="mt-5")
-            ], className="vh-100 d-flex align-items-center justify-content-center")
-        ])
 
     elif pathname == "/about":
         return html.Div([
@@ -268,6 +260,426 @@ def display_page(pathname):
             ], fluid=True, className="px-4 pb-5")
         ])
 
+    elif pathname == "/dashboard":
+        monthly_savings = {
+            'Months': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'CO2 Saved (kg)': [13, 16, 21, 18, 19, 23,
+                               17, 0, 0, 0, 0, 0]
+        }
+
+        fig = {
+            'data': [
+                {
+                    'x': monthly_savings['Months'],
+                    'y': monthly_savings['CO2 Saved (kg)'],
+                    'type': 'bar',
+                    'name': 'CO₂ Savings',
+                    'marker': {'color': '#28a745'}
+                }
+            ],
+            'layout': {
+                'title': 'Monthly CO₂ Savings (Total: 127 kg)',
+                'xaxis': {'title': 'Month'},
+                'yaxis': {'title': 'CO₂ Saved (kg)'},
+                'plot_bgcolor': 'rgba(0,0,0,0)',
+                'paper_bgcolor': 'rgba(0,0,0,0)',
+                'font': {'color': '#008000'}
+            }
+        }
+
+        badges = [
+            {"name": "Green Starter", "icon": "🌱", "description": "First 10kg CO₂ saved", "earned": True},
+            {"name": "Eco Warrior", "icon": "🛡️", "description": "50kg milestone", "earned": True},
+            {"name": "Carbon Hero", "icon": "🦸", "description": "100kg CO₂ saved", "earned": True},
+            {"name": "Platinum Saver", "icon": "🏆", "description": "200kg CO₂ saved", "earned": False},
+            {"name": "Air Ally", "icon": "💨", "description": "1 ton CO₂ saved", "earned": False},
+            {"name": "Tree Guardian", "icon": "🌳", "description": "Saved equivalent of 10 planted trees", "earned": False},
+            {"name": "Daily Commuter", "icon": "🚌", "description": "30 days of green driving", "earned": True},
+            {"name": "Transit Titan", "icon": "🚆", "description": "1 month of daily public transport", "earned": True},
+            {"name": "Bike Master", "icon": "🚴", "description": "100km cycled", "earned": False},
+            {"name": "Pedal Pioneer", "icon": "🏅", "description": "Ridden 1000 bike kilometers", "earned": False},
+        ]
+
+        return html.Div([
+            dbc.Container(fluid=True, className="px-0", children=[
+                dbc.Row([
+                    # Main content area (10/12 width)
+                    dbc.Col([
+                        # Header section
+                        html.Div([
+                            html.H2("Your Sustainability Dashboard",
+                                    className="text-center mb-3",
+                                    style={"font-weight": "bolder", "font-size": "3em"}),
+                            html.P("Track your eco-friendly progress with E-Mission Possible",
+                                   className="text-center mb-4 text-success",
+                                   style={"font-weight": "bold", "font-size": "1.5em"})
+                        ], className="container"),
+
+                        # Three environmental metric cards
+                        dbc.Container([
+                            dbc.Row([
+                                # Card 1: CO2 Savings
+                                dbc.Col(
+                                    dbc.Card(
+                                        [
+                                            html.Div("🌍", className="text-center display-4 mt-3"),
+                                            dbc.CardBody([
+                                                html.H4("CO₂ Savings", className="card-title text-center", style={"color": "#008000"}),
+                                                html.H2("127 kg", className="text-center my-3"),
+                                                html.P("Equivalent to planting 6 trees",
+                                                       className="card-text text-center",
+                                                       style={"color": "#008000"})
+                                            ])
+                                        ],
+                                        className="h-100",
+                                        style={
+                                            "border-radius": "15px",
+                                            "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                            "border-top": "4px solid #28a745"
+                                        }
+                                    ),
+                                    md=4, className="mb-4"
+                                ),
+
+                                # Card 2: Energy Efficiency
+                                dbc.Col(
+                                    dbc.Card(
+                                        [
+                                            html.Div("⚡", className="text-center display-4 mt-3"),
+                                            dbc.CardBody([
+                                                html.H4("Energy Saved", className="card-title text-center", style={"color": "#008000"}),
+                                                html.H2("342 kWh", className="text-center my-3"),
+                                                html.P("Enough to power a home for 11 days",
+                                                       className="card-text text-center",
+                                                       style={"color": "#008000"})
+                                            ])
+                                        ],
+                                        className="h-100",
+                                        style={
+                                            "border-radius": "15px",
+                                            "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                            "border-top": "4px solid #ffc107"
+                                        }
+                                    ),
+                                    md=4, className="mb-4"
+                                ),
+
+                                # Card 3: Alternative Transport
+                                dbc.Col(
+                                    dbc.Card(
+                                        [
+                                            html.Div("🚲", className="text-center display-4 mt-3"),
+                                            dbc.CardBody([
+                                                html.H4("Green Miles", className="card-title text-center", style={"color": "#008000"}),
+                                                html.H2("89 km", className="text-center my-3"),
+                                                html.P("Using bikes/public transport instead of cars",
+                                                       className="card-text text-center",
+                                                       style={"color": "#008000"})
+                                            ])
+                                        ],
+                                        className="h-100",
+                                        style={
+                                            "border-radius": "15px",
+                                            "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                            "border-top": "4px solid #17a2b8"
+                                        }
+                                    ),
+                                    md=4, className="mb-4"
+                                )
+                            ], justify="center", className="g-4")
+                        ], fluid="md"),
+
+                        # CO2 Graph
+                        dbc.Container([
+                            dbc.Card([
+                                dbc.CardHeader("CO₂ Savings Over Time", className="text-success", style={"font-weight": "bold"}),
+                                dbc.CardBody([
+                                    dcc.Graph(
+                                        id='co2-graph',
+                                        figure=fig,
+                                        config={'displayModeBar': False}
+                                    ),
+                                    html.P("Your monthly CO₂ savings from sustainable transportation options.",
+                                           className="text-muted text-center mt-2")
+                                ])
+                            ], className="mt-4",
+                                style={"border-radius": "15px", "box-shadow": "0 4px 8px rgba(0,0,0,0.1)"})
+                        ], fluid="md", className="mb-5")
+                    ], width=10),
+
+                    # Badge sidebar (2/12 width)
+                    dbc.Col([
+                        html.Div(
+                            [
+                                html.Div(
+                                    "Your Badges",
+                                    className="text-center fw-bold py-2",
+                                    style={
+                                        "background": "#28a745",
+                                        "color": "white",
+                                        "border-radius": "5px 5px 0 0",
+                                        "font-size": "1.1rem"
+                                    }
+                                ),
+                                html.Div(
+                                    [
+                                        html.Div(
+                                            [
+                                                html.Span(badge["icon"], className="me-2", style={"font-size": "1.8rem"}),
+                                                html.Div(
+                                                    [
+                                                        html.Strong(badge["name"], className="d-block"),
+                                                        html.Small(badge["description"], className="text-muted")
+                                                    ],
+                                                    className="d-inline-block"
+                                                )
+                                            ],
+                                            className="p-3 border-bottom",
+                                            style={
+                                                "background": "#e8f5e9" if badge["earned"] else "#f8f9fa",
+                                                "border-left": "4px solid #28a745" if badge["earned"] else "none",
+                                                "transition": "all 0.3s"
+                                            }
+                                        ) for badge in badges
+                                    ],
+                                    style={
+                                        "background": "#f8f9fa",
+                                        "border-radius": "0 0 5px 5px",
+                                        "height": "90vh",
+                                        "overflow-y": "auto"
+                                    }
+                                )
+                            ],
+                            style={
+                                "position": "sticky",
+                                "top": "20px",
+                                "border-radius": "5px",
+                                "box-shadow": "0 2px 5px rgba(0,0,0,0.1)",
+                                "width": "100%"
+                            }
+                        )
+                    ], width=2, className="pe-0")
+                ], className="g-0")
+            ])
+        ], className="py-4", style={"background-color": "#f8f9fa"})
+
+    elif pathname == "/newlyRegistered":
+        monthly_savings = {
+            'Months': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'CO2 Saved (kg)': [0, 0, 0, 0, 0, 0,
+                               0, 0, 0, 0, 0, 0]
+        }
+
+        fig = {
+            'data': [
+                {
+                    'x': monthly_savings['Months'],
+                    'y': monthly_savings['CO2 Saved (kg)'],
+                    'type': 'bar',
+                    'name': 'CO₂ Savings',
+                    'marker': {'color': '#28a745'}
+                }
+            ],
+            'layout': {
+                'title': 'Monthly CO₂ Savings (Total: 127 kg)',
+                'xaxis': {'title': 'Month'},
+                'yaxis': {'title': 'CO₂ Saved (kg)'},
+                'plot_bgcolor': 'rgba(0,0,0,0)',
+                'paper_bgcolor': 'rgba(0,0,0,0)',
+                'font': {'color': '#008000'}
+            }
+        }
+
+        badges = [
+            {"name": "Green Starter", "icon": "🌱", "description": "First 10kg CO₂ saved", "earned": False},
+            {"name": "Eco Warrior", "icon": "🛡️", "description": "50kg milestone", "earned": False},
+            {"name": "Carbon Hero", "icon": "🦸", "description": "100kg CO₂ saved", "earned": False},
+            {"name": "Platinum Saver", "icon": "🏆", "description": "200kg CO₂ saved", "earned": False},
+            {"name": "Air Ally", "icon": "💨", "description": "1 ton CO₂ saved", "earned": False},
+            {"name": "Tree Guardian", "icon": "🌳", "description": "Saved equivalent of 10 planted trees", "earned": False},
+            {"name": "Daily Commuter", "icon": "🚌", "description": "30 days of green driving", "earned": False},
+            {"name": "Transit Titan", "icon": "🚆", "description": "1 month of daily public transport", "earned": False},
+            {"name": "Bike Master", "icon": "🚴", "description": "100km cycled", "earned": False},
+            {"name": "Pedal Pioneer", "icon": "🏅", "description": "Ridden 1000 bike kilometers", "earned": False},
+        ]
+
+        return html.Div([
+            dbc.Container(fluid=True, className="px-0", children=[
+                dbc.Row([
+                    dbc.Col(
+                        dbc.Alert(
+                            "There is no data yet. Your road to sustainability starts here!",
+                            color="danger"
+                        ),
+                        width=9,  # 3/4 der Breite
+                        className="mx-auto"  # Zentriert die Spalte
+                    ),
+                ]),
+
+                dbc.Row([
+                    # Main content area (10/12 width)
+                    dbc.Col([
+                        # Header section
+                        html.Div([
+                            html.H2("Your Sustainability Dashboard",
+                                    className="text-center mb-3",
+                                    style={"font-weight": "bolder", "font-size": "3em"}),
+                            html.P("Track your eco-friendly progress with E-Mission Possible",
+                                   className="text-center mb-4 text-success",
+                                   style={"font-weight": "bold", "font-size": "1.5em"})
+                        ], className="container"),
+
+                        # Three environmental metric cards
+                        dbc.Container([
+                            dbc.Row([
+                                # Card 1: CO2 Savings
+                                dbc.Col(
+                                    dbc.Card(
+                                        [
+                                            html.Div("🌍", className="text-center display-4 mt-3"),
+                                            dbc.CardBody([
+                                                html.H4("CO₂ Savings", className="card-title text-center", style={"color": "#008000"}),
+                                                html.H2("0 kg", className="text-center my-3"),
+                                                html.P("Equivalent to planting 0 trees",
+                                                       className="card-text text-center",
+                                                       style={"color": "#008000"})
+                                            ])
+                                        ],
+                                        className="h-100",
+                                        style={
+                                            "border-radius": "15px",
+                                            "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                            "border-top": "4px solid #28a745"
+                                        }
+                                    ),
+                                    md=4, className="mb-4"
+                                ),
+
+                                # Card 2: Energy Efficiency
+                                dbc.Col(
+                                    dbc.Card(
+                                        [
+                                            html.Div("⚡", className="text-center display-4 mt-3"),
+                                            dbc.CardBody([
+                                                html.H4("Energy Saved", className="card-title text-center", style={"color": "#008000"}),
+                                                html.H2("0 kWh", className="text-center my-3"),
+                                                html.P("Enough to power a home for 0 days",
+                                                       className="card-text text-center",
+                                                       style={"color": "#008000"})
+                                            ])
+                                        ],
+                                        className="h-100",
+                                        style={
+                                            "border-radius": "15px",
+                                            "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                            "border-top": "4px solid #ffc107"
+                                        }
+                                    ),
+                                    md=4, className="mb-4"
+                                ),
+
+                                # Card 3: Alternative Transport
+                                dbc.Col(
+                                    dbc.Card(
+                                        [
+                                            html.Div("🚲", className="text-center display-4 mt-3"),
+                                            dbc.CardBody([
+                                                html.H4("Green Miles", className="card-title text-center", style={"color": "#008000"}),
+                                                html.H2("0 km", className="text-center my-3"),
+                                                html.P("Using bikes/public transport instead of cars",
+                                                       className="card-text text-center",
+                                                       style={"color": "#008000"})
+                                            ])
+                                        ],
+                                        className="h-100",
+                                        style={
+                                            "border-radius": "15px",
+                                            "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                            "border-top": "4px solid #17a2b8"
+                                        }
+                                    ),
+                                    md=4, className="mb-4"
+                                )
+                            ], justify="center", className="g-4")
+                        ], fluid="md"),
+
+                        # CO2 Graph
+                        dbc.Container([
+                            dbc.Card([
+                                dbc.CardHeader("CO₂ Savings Over Time (Year-to-Date)", className="text-success", style={"font-weight": "bold"}),
+                                dbc.CardBody([
+                                    dcc.Graph(
+                                        id='co2-graph',
+                                        figure=fig,
+                                        config={'displayModeBar': False}
+                                    ),
+                                    html.P("Your monthly CO₂ savings from using sustainable transportation options.",
+                                           className="text-muted text-center mt-2"),
+                                    html.P("Remember: Your annual CO₂ emissions are on average 10.3 tons",
+                                           className="text-muted text-center mt-2"),
+                                ])
+                            ], className="mt-4",
+                                style={"border-radius": "15px", "box-shadow": "0 4px 8px rgba(0,0,0,0.1)"})
+                        ], fluid="md", className="mb-5")
+                    ], width=10),
+
+                    # Badge sidebar (2/12 width)
+                    dbc.Col([
+                        html.Div(
+                            [
+                                html.Div(
+                                    "Your Badges",
+                                    className="text-center fw-bold py-2",
+                                    style={
+                                        "background": "#28a745",
+                                        "color": "white",
+                                        "border-radius": "5px 5px 0 0",
+                                        "font-size": "1.1rem"
+                                    }
+                                ),
+                                html.Div(
+                                    [
+                                        html.Div(
+                                            [
+                                                html.Span(badge["icon"], className="me-2", style={"font-size": "1.8rem"}),
+                                                html.Div(
+                                                    [
+                                                        html.Strong(badge["name"], className="d-block"),
+                                                        html.Small(badge["description"], className="text-muted")
+                                                    ],
+                                                    className="d-inline-block"
+                                                )
+                                            ],
+                                            className="p-3 border-bottom",
+                                            style={
+                                                "background": "#e8f5e9" if badge["earned"] else "#f8f9fa",
+                                                "border-left": "4px solid #28a745" if badge["earned"] else "none",
+                                                "transition": "all 0.3s"
+                                            }
+                                        ) for badge in badges
+                                    ],
+                                    style={
+                                        "background": "#f8f9fa",
+                                        "border-radius": "0 0 5px 5px",
+                                        "height": "90vh",
+                                        "overflow-y": "auto"
+                                    }
+                                )
+                            ],
+                            style={
+                                "position": "sticky",
+                                "top": "20px",
+                                "border-radius": "5px",
+                                "box-shadow": "0 2px 5px rgba(0,0,0,0.1)",
+                                "width": "100%"
+                            }
+                        )
+                    ], width=2, className="pe-0")
+                ], className="g-0")
+            ])
+        ], className="py-4", style={"background-color": "#f8f9fa"})
 
     else:  # Homepage / Calculator Page
         return html.Div([
