@@ -552,8 +552,8 @@ def display_page(pathname):
                             "There is no data yet. Your road to sustainability starts here!",
                             color="danger",
                             style={
-                                "fontWeight": "bold",  # Korrekte CSS-Eigenschaft (fontWeight statt font-weight)
-                                "fontSize": "1.2em"    # fontSize statt font-size
+                                "font-weight": "bold",  
+                                "fontSize": "1.2em"    
                             }
                         ),
                         width=9,  # 3/4 der Breite
