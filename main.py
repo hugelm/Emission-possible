@@ -5,6 +5,9 @@ import ssl
 import certifi
 import geopy.geocoders
 import plotly.graph_objs as go
+import folium
+from folium.plugins import AntPath
+import branca
 
 geopy.geocoders.options.default_ssl_context = ssl.create_default_context(cafile=certifi.where())
 
@@ -51,7 +54,7 @@ dcc.Location(id="url", refresh=False),
     Input("url", "pathname")
 )
 def display_page(pathname):
-    if pathname == "/login":
+    if pathname == "/login": # for demonstration use "User" John.Green@email.com so that the dashboard title fits
         return html.Div(
             style={
                 'background-image': 'url("/assets/WaldVogelperspektive.jpg")',
@@ -308,7 +311,7 @@ def display_page(pathname):
                     dbc.Col([
                         # Header section
                         html.Div([
-                            html.H2("Your Sustainability Dashboard",
+                            html.H2("John's Sustainability Dashboard",
                                     className="text-center mb-3",
                                     style={"font-weight": "bolder", "font-size": "3em"}),
                             html.P("Track your eco-friendly progress with E-Mission Possible",
@@ -393,15 +396,17 @@ def display_page(pathname):
                         # CO2 Graph
                         dbc.Container([
                             dbc.Card([
-                                dbc.CardHeader("CO₂ Savings Over Time", className="text-success", style={"font-weight": "bold"}),
+                                dbc.CardHeader("CO₂ Savings Over Time (Year-to-Date)", className="text-success", style={"font-weight": "bold"}),
                                 dbc.CardBody([
                                     dcc.Graph(
                                         id='co2-graph',
                                         figure=fig,
                                         config={'displayModeBar': False}
                                     ),
-                                    html.P("Your monthly CO₂ savings from sustainable transportation options.",
-                                           className="text-muted text-center mt-2")
+                                    html.P("Your monthly CO₂ savings from using sustainable transportation options.",
+                                           className="text-muted text-center mt-2"),
+                                    html.P("Remember: Your annual CO₂ emissions are on average 10.3 tons",
+                                           className="text-muted text-center mt-2"),
                                 ])
                             ], className="mt-4",
                                 style={"border-radius": "15px", "box-shadow": "0 4px 8px rgba(0,0,0,0.1)"})
@@ -409,54 +414,91 @@ def display_page(pathname):
                     ], width=10),
 
                     # Badge sidebar (2/12 width)
-                    dbc.Col([
+                      dbc.Col([
                         html.Div(
                             [
+                                # Neuer "Start new Navigation" Button
                                 html.Div(
-                                    "Your Badges",
-                                    className="text-center fw-bold py-2",
-                                    style={
-                                        "background": "#28a745",
-                                        "color": "white",
-                                        "border-radius": "5px 5px 0 0",
-                                        "font-size": "1.1rem"
-                                    }
+                                    [
+                                        dbc.Button(
+                                            "Start new Navigation",
+                                            href="/",
+                                            color="success",
+                                            className="w-100 py-3 fw-bold",
+                                            style={
+                                                "border-radius": "5px",
+                                                "margin-top": "2rem",
+                                                "margin-bottom": "2rem",
+                                                "font-size": "1.1rem",
+                                                "background": "#28a745",
+                                                "border": "none",
+                                                "box-shadow": "0 2px 5px rgba(0,0,0,0.1)"
+                                            }
+                                        )
+                                    ],
+                                    className="mb-3"
                                 ),
+                                
+                                # Existierende Badges Section
                                 html.Div(
                                     [
                                         html.Div(
+                                            "Your Badges",
+                                            className="text-center fw-bold py-2",
+                                            style={
+                                                "background": "#28a745",
+                                                "color": "white",
+                                                "border-radius": "5px 5px 0 0",
+                                                "font-size": "1.1rem"
+                                            }
+                                        ),
+                                        html.Div(
                                             [
-                                                html.Span(badge["icon"], className="me-2", style={"font-size": "1.8rem"}),
                                                 html.Div(
                                                     [
-                                                        html.Strong(badge["name"], className="d-block"),
-                                                        html.Small(badge["description"], className="text-muted")
+                                                        html.Span(badge["icon"], className="me-2", style={"font-size": "1.8rem"}),
+                                                        html.Div(
+                                                            [
+                                                                html.Strong(badge["name"], className="d-block"),
+                                                                html.Small(badge["description"], className="text-muted")
+                                                            ],
+                                                            className="d-inline-block"
+                                                        )
                                                     ],
-                                                    className="d-inline-block"
-                                                )
+                                                    className="p-3 border-bottom",
+                                                    style={
+                                                        "background": "#e8f5e9" if badge["earned"] else "#f8f9fa",
+                                                        "border-left": "4px solid #28a745" if badge["earned"] else "none",
+                                                        "transition": "all 0.3s"
+                                                    }
+                                                ) for badge in badges
                                             ],
-                                            className="p-3 border-bottom",
                                             style={
-                                                "background": "#e8f5e9" if badge["earned"] else "#f8f9fa",
-                                                "border-left": "4px solid #28a745" if badge["earned"] else "none",
-                                                "transition": "all 0.3s"
+                                                "background": "#f8f9fa",
+                                                "border-radius": "0 0 5px 5px",
+                                                "overflow-y": "auto",
+                                                #"flex": 1  # Nimmt verfügbaren Platz ein
                                             }
-                                        ) for badge in badges
+                                        )
                                     ],
                                     style={
-                                        "background": "#f8f9fa",
-                                        "border-radius": "0 0 5px 5px",
-                                        "height": "90vh",
-                                        "overflow-y": "auto"
+                                        "border-radius": "5px",                        
+                                        "box-shadow": "0 2px 5px rgba(0,0,0,0.1)",
+                                        "display": "flex",
+                                        "flexDirection": "column",
+                                        "height": "80vh",  # Feste Höhe
+                                        "maxHeight": "80vh"  # Maximale Höhe
                                     }
                                 )
                             ],
                             style={
                                 "position": "sticky",
                                 "top": "20px",
-                                "border-radius": "5px",
-                                "box-shadow": "0 2px 5px rgba(0,0,0,0.1)",
-                                "width": "100%"
+                                "width": "100%",
+                                "display": "flex",
+                                "flexDirection": "column",
+                                "height": "80vh",  # Gesamthöhe der Sidebar
+                                "maxHeight": "80vh"  # Maximale Gesamthöhe
                             }
                         )
                     ], width=2, className="pe-0")
@@ -511,7 +553,11 @@ def display_page(pathname):
                     dbc.Col(
                         dbc.Alert(
                             "There is no data yet. Your road to sustainability starts here!",
-                            color="danger"
+                            color="danger",
+                            style={
+                                "font-weight": "bold",  
+                                "fontSize": "1.2em"    
+                            }
                         ),
                         width=9,  # 3/4 der Breite
                         className="mx-auto"  # Zentriert die Spalte
@@ -523,7 +569,7 @@ def display_page(pathname):
                     dbc.Col([
                         # Header section
                         html.Div([
-                            html.H2("Your Sustainability Dashboard",
+                            html.H2("John's Sustainability Dashboard",
                                     className="text-center mb-3",
                                     style={"font-weight": "bolder", "font-size": "3em"}),
                             html.P("Track your eco-friendly progress with E-Mission Possible",
@@ -626,54 +672,91 @@ def display_page(pathname):
                     ], width=10),
 
                     # Badge sidebar (2/12 width)
-                    dbc.Col([
+                      dbc.Col([
                         html.Div(
                             [
+                                # Neuer "Start new Navigation" Button
                                 html.Div(
-                                    "Your Badges",
-                                    className="text-center fw-bold py-2",
-                                    style={
-                                        "background": "#28a745",
-                                        "color": "white",
-                                        "border-radius": "5px 5px 0 0",
-                                        "font-size": "1.1rem"
-                                    }
+                                    [
+                                        dbc.Button(
+                                            "Start new Navigation",
+                                            href="/",
+                                            color="success",
+                                            className="w-100 py-3 fw-bold",
+                                            style={
+                                                "border-radius": "5px",
+                                                "margin-top": "2rem",
+                                                "margin-bottom": "2rem",
+                                                "font-size": "1.1rem",
+                                                "background": "#28a745",
+                                                "border": "none",
+                                                "box-shadow": "0 2px 5px rgba(0,0,0,0.1)"
+                                            }
+                                        )
+                                    ],
+                                    className="mb-3"
                                 ),
+                                
+                                # Existierende Badges Section
                                 html.Div(
                                     [
                                         html.Div(
+                                            "Your Badges",
+                                            className="text-center fw-bold py-2",
+                                            style={
+                                                "background": "#28a745",
+                                                "color": "white",
+                                                "border-radius": "5px 5px 0 0",
+                                                "font-size": "1.1rem"
+                                            }
+                                        ),
+                                        html.Div(
                                             [
-                                                html.Span(badge["icon"], className="me-2", style={"font-size": "1.8rem"}),
                                                 html.Div(
                                                     [
-                                                        html.Strong(badge["name"], className="d-block"),
-                                                        html.Small(badge["description"], className="text-muted")
+                                                        html.Span(badge["icon"], className="me-2", style={"font-size": "1.8rem"}),
+                                                        html.Div(
+                                                            [
+                                                                html.Strong(badge["name"], className="d-block"),
+                                                                html.Small(badge["description"], className="text-muted")
+                                                            ],
+                                                            className="d-inline-block"
+                                                        )
                                                     ],
-                                                    className="d-inline-block"
-                                                )
+                                                    className="p-3 border-bottom",
+                                                    style={
+                                                        "background": "#e8f5e9" if badge["earned"] else "#f8f9fa",
+                                                        "border-left": "4px solid #28a745" if badge["earned"] else "none",
+                                                        "transition": "all 0.3s"
+                                                    }
+                                                ) for badge in badges
                                             ],
-                                            className="p-3 border-bottom",
                                             style={
-                                                "background": "#e8f5e9" if badge["earned"] else "#f8f9fa",
-                                                "border-left": "4px solid #28a745" if badge["earned"] else "none",
-                                                "transition": "all 0.3s"
+                                                "background": "#f8f9fa",
+                                                "border-radius": "0 0 5px 5px",
+                                                "overflow-y": "auto",
+                                                #"flex": 1  # Nimmt verfügbaren Platz ein
                                             }
-                                        ) for badge in badges
+                                        )
                                     ],
                                     style={
-                                        "background": "#f8f9fa",
-                                        "border-radius": "0 0 5px 5px",
-                                        "height": "90vh",
-                                        "overflow-y": "auto"
+                                        "border-radius": "5px",                        
+                                        "box-shadow": "0 2px 5px rgba(0,0,0,0.1)",
+                                        "display": "flex",
+                                        "flexDirection": "column",
+                                        "height": "80vh",  # Feste Höhe
+                                        "maxHeight": "80vh"  # Maximale Höhe
                                     }
                                 )
                             ],
                             style={
                                 "position": "sticky",
                                 "top": "20px",
-                                "border-radius": "5px",
-                                "box-shadow": "0 2px 5px rgba(0,0,0,0.1)",
-                                "width": "100%"
+                                "width": "100%",
+                                "display": "flex",
+                                "flexDirection": "column",
+                                "height": "80vh",  # Gesamthöhe der Sidebar
+                                "maxHeight": "80vh"  # Maximale Gesamthöhe
                             }
                         )
                     ], width=2, className="pe-0")
@@ -756,7 +839,8 @@ def display_page(pathname):
                                 dbc.Alert("Please enter a route to get started.",
                                           color="light",
                                           id="alert-calculation",
-                                          className="text-center fw-semibold shadow-sm")
+                                          className="text-center fw-semibold shadow-sm"),
+                                html.Div(id="map-container", style={'height': '500px'})
                             ]
                         )
                     ], width=12)
@@ -767,7 +851,8 @@ def display_page(pathname):
 # Callback function for calculating the distance and time via API
 @app.callback(
     [Output("alert-calculation", "children"),
-     Output("alert-calculation", "color")],
+     Output("alert-calculation", "color"),
+     Output("map-container", "children")],
     Input("btn-calculate", "n_clicks"),
     State("input-start", "value"),
     State("input-destination", "value"),
@@ -775,16 +860,79 @@ def display_page(pathname):
 )
 def calculate_distance_time(n_clicks, start, destination, vehicle):
     if not start or not destination:
-        return "Please insert start location and destination.", "warning"
+        return "Please insert start location and destination.", "warning", None
 
-    distance_km, duration_min, status = distanceAPIGraphHopper.get_distance_and_duration(start, destination, vehicle)
-    if status != "success":
-        return f"Error: {status}", "danger"
+    result = distanceAPIGraphHopper.get_route_details(start, destination, vehicle)
+    
+    if result.get("status") != "success":
+        return f"Error: {result.get('status')}", "danger", None
+
+    distance_km = result["distance_km"]
+    duration_min = result["duration_min"]
+    coordinates = result["coordinates"]
+
+    # Create Folium Map
+    m = folium.Map(
+        location=[coordinates[0][1], coordinates[0][0]],
+        zoom_start=12,
+        tiles='OpenStreetMap',
+        control_scale=True
+    )
+
+    # Add route
+    AntPath(
+        locations=[[lat, lon] for [lon, lat] in coordinates],
+        color='#2e7d32',
+        weight=6,
+        dash_array=[10, 20]
+    ).add_to(m)
+
+    # Add markers
+    folium.Marker(
+        [coordinates[0][1], coordinates[0][0]],
+        popup="Start",
+        icon=folium.Icon(color='green', icon='play', prefix='fa')
+    ).add_to(m)
+
+    folium.Marker(
+        [coordinates[-1][1], coordinates[-1][0]],
+        popup="Destination",
+        icon=folium.Icon(color='red', icon='stop', prefix='fa')
+    ).add_to(m)
+
+    # Add info box
+    distance_html = f"""
+    <div style="position: fixed; bottom: 50px; left: 50px; width: 250px; height: 80px;
+                background-color: white; border:2px solid grey; z-index:9999;
+                font-size:14px; padding: 5px; border-radius: 5px;">
+        <b>Route Information</b><br>
+        Distance: {distance_km:.1f} km<br>
+        Duration: {duration_min:.0f} min
+    </div>
+    """
+    m.get_root().html.add_child(branca.element.Element(distance_html))
+
+    # Convert to HTML
+    map_html = m.get_root().render()
+    map_component = html.Iframe(
+        srcDoc=map_html,
+        style={'width': '100%', 'height': '500px', 'border': 'none'}
+    )
 
     stats_card = eco_stats_card(distance_km, duration_min, vehicle)
     co2_graph = co2_emissions_graph(distance_km)
+    
+    return "Calculation successful.", "success", html.Div([
+        dbc.Row([
+            dbc.Col(stats_card, width=4),
+            dbc.Col(co2_graph, width=8),
+        ], className="mb-4 g-4"),
 
-    return html.Div([stats_card, co2_graph]), "success"
+        map_component
+    ])
+
+
+
 
 # Stats
 
@@ -820,7 +968,7 @@ def co2_emissions_graph(distance_km):
 
     data = [
         go.Bar(name='Car', x=['CO₂ Emissions'], y=[co2_car]),
-        go.Bar(name='Bike/Walk', x=['CO₂ Emissions'], y=[co2_bike]),
+        # go.Bar(name='Bike/Walk', x=['CO₂ Emissions'], y=[co2_bike]),
         go.Bar(name='Public Transport', x=['CO₂ Emissions'], y=[co2_public_transport]),
     ]
 
