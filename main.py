@@ -5,6 +5,9 @@ import ssl
 import certifi
 import geopy.geocoders
 import plotly.graph_objs as go
+import folium
+from folium.plugins import AntPath
+import branca
 
 geopy.geocoders.options.default_ssl_context = ssl.create_default_context(cafile=certifi.where())
 
@@ -836,7 +839,8 @@ def display_page(pathname):
                                 dbc.Alert("Please enter a route to get started.",
                                           color="light",
                                           id="alert-calculation",
-                                          className="text-center fw-semibold shadow-sm")
+                                          className="text-center fw-semibold shadow-sm"),
+                                html.Div(id="map-container", style={'height': '500px'})
                             ]
                         )
                     ], width=12)
@@ -847,7 +851,8 @@ def display_page(pathname):
 # Callback function for calculating the distance and time via API
 @app.callback(
     [Output("alert-calculation", "children"),
-     Output("alert-calculation", "color")],
+     Output("alert-calculation", "color"),
+     Output("map-container", "children")],
     Input("btn-calculate", "n_clicks"),
     State("input-start", "value"),
     State("input-destination", "value"),
@@ -855,16 +860,79 @@ def display_page(pathname):
 )
 def calculate_distance_time(n_clicks, start, destination, vehicle):
     if not start or not destination:
-        return "Please insert start location and destination.", "warning"
+        return "Please insert start location and destination.", "warning", None
 
-    distance_km, duration_min, status = distanceAPIGraphHopper.get_distance_and_duration(start, destination, vehicle)
-    if status != "success":
-        return f"Error: {status}", "danger"
+    result = distanceAPIGraphHopper.get_route_details(start, destination, vehicle)
+    
+    if result.get("status") != "success":
+        return f"Error: {result.get('status')}", "danger", None
+
+    distance_km = result["distance_km"]
+    duration_min = result["duration_min"]
+    coordinates = result["coordinates"]
+
+    # Create Folium Map
+    m = folium.Map(
+        location=[coordinates[0][1], coordinates[0][0]],
+        zoom_start=12,
+        tiles='OpenStreetMap',
+        control_scale=True
+    )
+
+    # Add route
+    AntPath(
+        locations=[[lat, lon] for [lon, lat] in coordinates],
+        color='#2e7d32',
+        weight=6,
+        dash_array=[10, 20]
+    ).add_to(m)
+
+    # Add markers
+    folium.Marker(
+        [coordinates[0][1], coordinates[0][0]],
+        popup="Start",
+        icon=folium.Icon(color='green', icon='play', prefix='fa')
+    ).add_to(m)
+
+    folium.Marker(
+        [coordinates[-1][1], coordinates[-1][0]],
+        popup="Destination",
+        icon=folium.Icon(color='red', icon='stop', prefix='fa')
+    ).add_to(m)
+
+    # Add info box
+    distance_html = f"""
+    <div style="position: fixed; bottom: 50px; left: 50px; width: 250px; height: 80px;
+                background-color: white; border:2px solid grey; z-index:9999;
+                font-size:14px; padding: 5px; border-radius: 5px;">
+        <b>Route Information</b><br>
+        Distance: {distance_km:.1f} km<br>
+        Duration: {duration_min:.0f} min
+    </div>
+    """
+    m.get_root().html.add_child(branca.element.Element(distance_html))
+
+    # Convert to HTML
+    map_html = m.get_root().render()
+    map_component = html.Iframe(
+        srcDoc=map_html,
+        style={'width': '100%', 'height': '500px', 'border': 'none'}
+    )
 
     stats_card = eco_stats_card(distance_km, duration_min, vehicle)
     co2_graph = co2_emissions_graph(distance_km)
+    
+    return "Calculation successful.", "success", html.Div([
+        dbc.Row([
+            dbc.Col(stats_card, width=4),
+            dbc.Col(co2_graph, width=8),
+        ], className="mb-4 g-4"),
 
-    return html.Div([stats_card, co2_graph]), "success"
+        map_component
+    ])
+
+
+
 
 # Stats
 
@@ -900,7 +968,7 @@ def co2_emissions_graph(distance_km):
 
     data = [
         go.Bar(name='Car', x=['CO₂ Emissions'], y=[co2_car]),
-        go.Bar(name='Bike/Walk', x=['CO₂ Emissions'], y=[co2_bike]),
+        # go.Bar(name='Bike/Walk', x=['CO₂ Emissions'], y=[co2_bike]),
         go.Bar(name='Public Transport', x=['CO₂ Emissions'], y=[co2_public_transport]),
     ]
 
