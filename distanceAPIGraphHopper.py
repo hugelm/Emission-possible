@@ -5,7 +5,9 @@ from geopy.geocoders import Nominatim
 # Documentation: https://docs.graphhopper.com/openapi/routing/getroute
 # Keys: https://graphhopper.com/dashboard/#/apikeys (500 requests per day)
 
+
 api_key = "API_KEY"
+
 geolocator = Nominatim(user_agent="EmissionPossible")
 
 def geocode_address(address):
