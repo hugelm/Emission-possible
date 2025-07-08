@@ -6,7 +6,7 @@ from geopy.geocoders import Nominatim
 # Keys: https://graphhopper.com/dashboard/#/apikeys (500 requests per day)
 
 
-api_key = "API_KEY"
+api_key = os.getenv("API_KEY_GRAPHHOPPER")
 
 geolocator = Nominatim(user_agent="EmissionPossible")
 

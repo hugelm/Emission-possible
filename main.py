@@ -78,7 +78,7 @@ def display_page(pathname):
                         className="text-center mb-4",
                         children=[
                             html.Img(src="/assets/Bild4.png", style={'height': '80px'}),
-                            html.H2("Welcome Back", style={'color': '#28a745', 'margin-top': '1rem'})
+                            html.H2("Saving the world? There is a login for that...", style={'color': '#28a745', 'margin-top': '1rem'})
                         ]
                     ),
                     dbc.Input(placeholder="Email", type="email", className="mb-3"),
@@ -410,7 +410,55 @@ def display_page(pathname):
                                 ])
                             ], className="mt-4",
                                 style={"border-radius": "15px", "box-shadow": "0 4px 8px rgba(0,0,0,0.1)"})
+                        ], fluid="md", className="mb-5"),
+
+                        dbc.Container([
+                            dbc.Card([
+                                dbc.CardHeader(
+                                    html.Div([
+                                        html.Span("💡", className="me-2"),
+                                        html.Span("Eco Recommendations")
+                                    ], className="d-flex align-items-center justify-content-center fw-bold"),
+                                    className="text-white bg-success",
+                                    style={"border-top-left-radius": "15px", "border-top-right-radius": "15px"}
+                                ),
+                                dbc.CardBody([
+                                    html.P("You're making great progress in reducing your transport emissions! Here are some next-level tips to stay on track:",
+                                           className="text-center text-muted mb-4"),
+
+                                    dbc.ListGroup([
+                                        dbc.ListGroupItem([
+                                            html.Span("🚲", className="me-2"),
+                                            html.Span("Double your cycling goal this month – aim for 200 km!")
+                                        ]),
+                                        dbc.ListGroupItem([
+                                            html.Span("🚌", className="me-2"),
+                                            html.Span("Switch one weekly car trip to public transport.")
+                                        ]),
+                                        dbc.ListGroupItem([
+                                            html.Span("🚶", className="me-2"),
+                                            html.Span("Incorporate walking into your commute by parking further or getting off one stop early.")
+                                        ]),
+                                        dbc.ListGroupItem([
+                                            html.Span("📊", className="me-2"),
+                                            html.Span("Track your CO₂ savings weekly to spot trends and stay motivated.")
+                                        ]),
+                                        dbc.ListGroupItem([
+                                            html.Span("🛴", className="me-2"),
+                                            html.Span("Try an e-scooter or car share app for short distances.")
+                                        ])
+                                    ], flush=True, style={"font-size": "1rem"})
+                                ])
+                            ],
+                                className="mt-4",
+                                style={
+                                    "border-radius": "15px",
+                                    "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                    "background-color": "#ffffff"
+                                }
+                            )
                         ], fluid="md", className="mb-5")
+
                     ], width=10),
 
                     # Badge sidebar (2/12 width)
@@ -668,7 +716,48 @@ def display_page(pathname):
                                 ])
                             ], className="mt-4",
                                 style={"border-radius": "15px", "box-shadow": "0 4px 8px rgba(0,0,0,0.1)"})
+                        ], fluid="md", className="mb-5"),
+
+                        dbc.Container([
+                            dbc.Card([
+                                dbc.CardHeader(
+                                    html.Div([
+                                        html.Span("💡", className="me-2"),
+                                        html.Span("Eco Recommendations")
+                                    ], className="d-flex align-items-center justify-content-center fw-bold"),
+                                    className="text-white bg-success",
+                                    style={"border-top-left-radius": "15px", "border-top-right-radius": "15px"}
+                                ),
+                                dbc.CardBody([
+                                    html.P("Getting started is the first step. Try these beginner-friendly transport actions to reduce your carbon footprint:",
+                                           className="text-center text-muted mb-4"),
+
+                                    dbc.ListGroup([
+                                        dbc.ListGroupItem([
+                                            html.Span("🚶", className="me-2"),
+                                            html.Span("Walk short trips under 2 km instead of driving.")
+                                        ]),
+                                        dbc.ListGroupItem([
+                                            html.Span("🚲", className="me-2"),
+                                            html.Span("Use a bike for nearby errands or commuting once a week.")
+                                        ]),
+                                        dbc.ListGroupItem([
+                                            html.Span("📱", className="me-2"),
+                                            html.Span("Start tracking your sustainable trips to see your impact grow.")
+                                        ])
+                                    ], flush=True, style={"font-size": "1rem"})
+                                ])
+                            ],
+                                className="mt-4",
+                                style={
+                                    "border-radius": "15px",
+                                    "box-shadow": "0 4px 8px rgba(0,0,0,0.1)",
+                                    "background-color": "#ffffff"
+                                }
+                            )
                         ], fluid="md", className="mb-5")
+
+
                     ], width=10),
 
                     # Badge sidebar (2/12 width)
