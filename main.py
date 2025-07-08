@@ -75,7 +75,7 @@ def display_page(pathname):
                         className="text-center mb-4",
                         children=[
                             html.Img(src="/assets/Bild4.png", style={'height': '80px'}),
-                            html.H2("Saving the world? There's a login for that...", style={'color': '#28a745', 'margin-top': '1rem'})
+                            html.H2("Welcome Back", style={'color': '#28a745', 'margin-top': '1rem'})
                         ]
                     ),
                     dbc.Input(placeholder="Email", type="email", className="mb-3"),
