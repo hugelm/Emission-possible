@@ -868,88 +868,113 @@ def display_page(pathname):
                 className="carousel mb-5"
             ),
 
-            dbc.Container([
-                dbc.Row([
-                    dbc.Col([
-                        html.Div([
-                            html.H1("E-Mission Possible", className="display-3 fw-bold text-success text-center"),
-                            html.H4("Plan Smarter. Travel Greener.", className="text-muted text-center mb-4"),
+                    dbc.Container(fluid=True, className="py-5", children=[
+                        dbc.Row([
+                            dbc.Col([
+                                html.Div([
+                                    html.H1("E-Mission Possible", className="display-3 fw-bold text-success text-center"),
+                                    html.H4("Plan Smarter. Travel Greener.", className="text-muted text-center mb-4"),
+                                ])
+                            ], width=12)
+                        ], justify="center"),
+
+                        # Eingabefelder und Button
+                        dbc.Row([
+                            dbc.Col(dbc.Input(
+                                id="input-start",
+                                placeholder="🌍 Start location...",
+                                type="text",
+                                className="form-control-lg"
+                            ), width=4),
+
+                            dbc.Col(dbc.Input(
+                                id="input-destination",
+                                placeholder="🚩 Destination...",
+                                type="text",
+                                className="form-control-lg"
+                            ), width=4),
+
+                            dbc.Col(
+                                dcc.Dropdown(
+                                    id="input-vehicle",
+                                    options=[
+                                        {"label": "Car", "value": "car"},
+                                        {"label": "Bike", "value": "bike"},
+                                        {"label": "Walk", "value": "foot"},
+                                    ],
+                                    value="car",
+                                    clearable=False,
+                                    style={"width": "100%", "height": "40px", "fontSize": "1.1rem"}
+                                ),
+                                width=2,
+                                className="d-flex align-items-center"
+                            ),
+
+                            dbc.Col(dbc.Button(
+                                "Calculate",
+                                id="btn-calculate",
+                                color="success",
+                                size="lg",
+                                className="w-100"
+                            ), width=2),
+                        ], className="mb-4"),
+
+                        # Ergebnisse und Karte
+                        dbc.Row([
+                            dbc.Col([
+                                dcc.Loading(
+                                    id="loading-1",
+                                    type="circle",
+                                    color="#198754",
+                                    children=[
+                                        dbc.Alert("Please enter a route to get started.",
+                                                color="light",
+                                                id="alert-calculation",
+                                                className="text-center fw-semibold shadow-sm"),
+                                        html.Div(id="map-container", style={'height': 'auto'}),
+                                        dbc.Button(
+                                            "Start Navigation",
+                                            id="btn-start-navigation",
+                                            color="primary",
+                                            size="lg",
+                                            className="mt-3 w-100",
+                                            style={"display": "none"}
+                                        )
+                                    ]
+                                )
+                            ], width=12)
                         ])
-                    ], width=12)
-                ], justify="center"),
+                    ]),
 
-                dbc.Row([
-                    dbc.Col(dbc.Input(
-                        id="input-start",
-                        placeholder="🌍 Start location...",
-                        type="text",
-                        className="form-control-lg"
-                    ), width=4),
-
-                    dbc.Col(dbc.Input(
-                        id="input-destination",
-                        placeholder="🚩 Destination...",
-                        type="text",
-                        className="form-control-lg"
-                    ), width=4),
-
-                    dbc.Col(
-                        dcc.Dropdown(
-                            id="input-vehicle",
-                            options=[
-                                {"label": "Car", "value": "car"},
-                                {"label": "Bike", "value": "bike"},
-                                {"label": "Walk", "value": "foot"},
-                            ],
-                            value="car",
-                            clearable=False,
-                            style={"width": "100%", "height": "40px", "fontSize": "1.1rem"}
-                        ),
-                        width=2,
-                        className="d-flex align-items-center"
-                    ),
-
-                    dbc.Col(dbc.Button(
-                        "Calculate",
-                        id="btn-calculate",
-                        color="success",
-                        size="lg",
-                        className="w-100"
-                    ), width=2),
-                ], className="mb-4"),
-
-                dbc.Row([
-                    dbc.Col([
-                        dcc.Loading(
-                            id="loading-1",
-                            type="circle",
-                            color="#198754",  # Bootstrap green
-                            children=[
-                                dbc.Alert("Please enter a route to get started.",
-                                          color="light",
-                                          id="alert-calculation",
-                                          className="text-center fw-semibold shadow-sm"),
-                                html.Div(id="map-container", style={'height': '500px'})
-                            ]
-                        )
-                    ], width=12)
+                    # Modal
+                    dbc.Modal(
+                        [
+                            dbc.ModalHeader(dbc.ModalTitle("Preparing Navigation")),
+                            dbc.ModalBody("Please switch to your mobile phone to start the navigation."),
+                            dbc.ModalFooter(
+                                dbc.Button("Close", id="close-modal", className="ms-auto", n_clicks=0)
+                            ),
+                        ],
+                        id="modal-navigation",
+                        is_open=False,
+                    )
                 ])
-            ], fluid=True, className="py-5")
-        ])
+
 
 # Callback function for calculating the distance and time via API
 @app.callback(
     [Output("alert-calculation", "children"),
      Output("alert-calculation", "color"),
-     Output("map-container", "children")],
+     Output("map-container", "children"),
+     Output("btn-start-navigation", "style")],  # Steuert die Sichtbarkeit des Buttons
     Input("btn-calculate", "n_clicks"),
-    State("input-start", "value"),
-    State("input-destination", "value"),
-    State("input-vehicle", "value"),
+    [State("input-start", "value"),
+     State("input-destination", "value"),
+     State("input-vehicle", "value")],
 )
 def calculate_distance_time(n_clicks, start, destination, vehicle):
     if not start or not destination:
-        return "Please insert start location and destination.", "warning", None
+        return "Please insert start location and destination.", "warning", None, {"display": "none"}
 
     result = distanceAPIGraphHopper.get_route_details(start, destination, vehicle)
     
@@ -1010,15 +1035,26 @@ def calculate_distance_time(n_clicks, start, destination, vehicle):
 
     stats_card = eco_stats_card(distance_km, duration_min, vehicle)
     co2_graph = co2_emissions_graph(distance_km)
+    start_navigation_button = dbc.Button(
+        "Start Navigation",
+        id="btn-start-navigation",
+        color="primary",
+        size="lg",
+        className="mt-3 w-100"
+    )
     
-    return "Calculation successful.", "success", html.Div([
-        dbc.Row([
-            dbc.Col(stats_card, width=4),
-            dbc.Col(co2_graph, width=8),
-        ], className="mb-4 g-4"),
-
-        map_component
-    ])
+    return (
+        "Calculation successful.",
+        "success",
+        html.Div([
+            dbc.Row([
+                dbc.Col(stats_card, width=4),
+                dbc.Col(co2_graph, width=8),
+            ], className="mb-4 g-4"),
+            map_component
+        ]),
+        {"display": "block"}  # Button sichtbar machen
+    )
 
 
 
@@ -1072,6 +1108,16 @@ def co2_emissions_graph(distance_km):
     fig = go.Figure(data=data, layout=layout)
     return dcc.Graph(figure=fig)
 
+@app.callback(
+    Output("modal-navigation", "is_open"),
+    [Input("btn-start-navigation", "n_clicks"),
+     Input("close-modal", "n_clicks")],
+    [State("modal-navigation", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
 
 if __name__ == "__main__":
     app.run_server(debug=True, port=8080)
