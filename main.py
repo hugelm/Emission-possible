@@ -899,6 +899,7 @@ def display_page(pathname):
                                     id="input-vehicle",
                                     options=[
                                         {"label": "Car", "value": "car"},
+                                        {"label": "Public Transport", "value": "car"},
                                         {"label": "Bike", "value": "bike"},
                                         {"label": "Walk", "value": "foot"},
                                     ],
@@ -1120,4 +1121,4 @@ def toggle_modal(n1, n2, is_open):
     return is_open
 
 if __name__ == "__main__":
-    app.run_server(debug=True, port=8080)
+    app.run_server(debug=False, port=8080)
